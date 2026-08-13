@@ -13,7 +13,6 @@ import { localStorageService } from "../storage/storageService";
 import { storageKeys } from "../storage/storageKeys";
 
 const now = "2026-08-13T14:00:00.000Z";
-const seedUserIds = new Set(["usr_admin_001", "usr_teacher_001", "usr_family_001"]);
 
 const seedUsers: User[] = [
   {
@@ -44,6 +43,16 @@ const seedUsers: User[] = [
     role: "STUDENT_FAMILY",
     isActive: true,
     relatedStudentId: "stu_001",
+    createdAt: now,
+    updatedAt: now,
+  },
+  {
+    id: "usr_staff_001",
+    firstName: "Andrea",
+    lastName: "Castillo",
+    email: "personal@colegiohorizonte.edu.cr",
+    role: "STAFF",
+    isActive: true,
     createdAt: now,
     updatedAt: now,
   },
@@ -87,10 +96,11 @@ const seedPasswords: Record<string, string> = {
   usr_admin_001: "Admin2026!",
   usr_teacher_001: "Docente2026!",
   usr_family_001: "Familia2026!",
+  usr_staff_001: "Personal2026!",
 };
 
-async function buildCredentials(): Promise<Credential[]> {
-  return Promise.all(seedUsers.map(async (user) => {
+async function buildCredentials(users: User[]): Promise<Credential[]> {
+  return Promise.all(users.map(async (user) => {
     const passwordSalt = createSalt();
     return {
       userId: user.id,
@@ -100,26 +110,25 @@ async function buildCredentials(): Promise<Credential[]> {
   }));
 }
 
-function needsCredentialMigration(users: User[], credentials: Credential[]): boolean {
-  return seedUsers.some((seedUser) => {
-    const storedUser = users.find((user) => user.id === seedUser.id);
-    const credential = credentials.find((item) => item.userId === seedUser.id);
-    return storedUser?.email.toLowerCase() !== seedUser.email
-      || !credential
-      || credential.passwordSalt === "demo"
-      || credential.passwordHash.length !== 64;
-  });
-}
-
-async function migrateLegacyAccounts(): Promise<void> {
+async function addMissingAccounts(): Promise<void> {
   const users = localStorageService.get<User[]>(storageKeys.users, []).value;
   const credentials = localStorageService.get<Credential[]>(storageKeys.credentials, []).value;
-  if (!needsCredentialMigration(users, credentials)) return;
+  const storedUserIds = new Set(users.map((user) => user.id));
+  const storedCredentialIds = new Set(credentials.map((credential) => credential.userId));
+  const missingUsers = seedUsers.filter((user) => !storedUserIds.has(user.id));
+  const missingCredentialUsers = seedUsers.filter(
+    (user) => !storedCredentialIds.has(user.id),
+  );
 
-  const customUsers = users.filter((user) => !seedUserIds.has(user.id));
-  const customCredentials = credentials.filter((credential) => !seedUserIds.has(credential.userId));
-  localStorageService.set(storageKeys.users, [...seedUsers, ...customUsers]);
-  localStorageService.set(storageKeys.credentials, [...(await buildCredentials()), ...customCredentials]);
+  if (missingUsers.length > 0) {
+    localStorageService.set(storageKeys.users, [...users, ...missingUsers]);
+  }
+  if (missingCredentialUsers.length > 0) {
+    localStorageService.set(
+      storageKeys.credentials,
+      [...credentials, ...(await buildCredentials(missingCredentialUsers))],
+    );
+  }
 }
 
 function initializeCollection<T extends { id: string }>(key: string, values: T[]): void {
@@ -136,12 +145,7 @@ function initializeCollection<T extends { id: string }>(key: string, values: T[]
 }
 
 export async function initializeSeedData(): Promise<void> {
-  const usersMissing = localStorageService.get<User[] | null>(storageKeys.users, null).value === null;
-  const credentialsMissing = localStorageService.get<Credential[] | null>(storageKeys.credentials, null).value === null;
-
-  if (usersMissing) localStorageService.set(storageKeys.users, seedUsers);
-  if (credentialsMissing) localStorageService.set(storageKeys.credentials, await buildCredentials());
-  await migrateLegacyAccounts();
+  await addMissingAccounts();
 
   initializeCollection(storageKeys.students, seedStudents);
   initializeCollection(storageKeys.courses, seedCourses);

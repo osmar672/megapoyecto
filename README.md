@@ -1,31 +1,45 @@
 # Intranet Escolar
 
-Prototipo funcional de intranet escolar con autenticación por roles, calificaciones, asistencia, comunicados y gestión básica de usuarios.
+Intranet escolar construida con React y TypeScript, con autenticación por roles, calificaciones, asistencia, comunicados y gestión de usuarios.
 
 ## Tecnologías del prototipo
-- HTML5
-- CSS3
-- JavaScript
-- localStorage y sessionStorage
-- Font Awesome/CDN para iconos
+
+- React y TypeScript
+- Vite/Vinext
+- React Router
+- CSS Modules
+- Vitest
+- `localStorage` y `sessionStorage`
 
 ## Accesos de prueba
-- Administración: `admin@escuela.test` / `admin123`
-- Docente: `docente@escuela.test` / `docente123`
-- Estudiante/Familia: `familia@escuela.test` / `familia123`
+
+- Administración: `admin@colegiohorizonte.edu.cr` / `Admin2026!`
+- Docente: `docente@colegiohorizonte.edu.cr` / `Docente2026!`
+- Estudiante/Familia: `familia@colegiohorizonte.edu.cr` / `Familia2026!`
+- Personal administrativo: `personal@colegiohorizonte.edu.cr` / `Personal2026!`
 
 ## Roles
+
 - `ADMIN`: administración completa del prototipo.
 - `TEACHER`: acceso académico limitado a sus cursos.
 - `STUDENT_FAMILY`: consulta únicamente la información del estudiante relacionado.
+- `STAFF`: acceso a herramientas y comunicaciones del personal administrativo.
 
 ## Claves de almacenamiento
-Se utilizan las claves requeridas por el documento del proyecto:
-`schoolIntranet.v1.users`, `schoolIntranet.v1.credentials`, `schoolIntranet.v1.students`,
-`schoolIntranet.v1.courses`, `schoolIntranet.v1.enrollments`, `schoolIntranet.v1.grades`,
-`schoolIntranet.v1.attendance`, `schoolIntranet.v1.announcements` y `schoolIntranet.v1.session`.
+
+Todas las colecciones persistentes usan el prefijo `schoolIntranet.v1` y están centralizadas en `src/core/storage/storageKeys.ts`.
 
 ## Ejecución
-Abrir `page/index.html` con Live Server o un servidor HTTP local.
+
+```bash
+npm install
+npm run dev
+```
+
+Antes de integrar cambios:
+
+```bash
+npm run check
+```
 
 > Los datos son ficticios y están destinados únicamente al prototipo. No se deben almacenar datos reales de menores.

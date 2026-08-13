@@ -4,7 +4,7 @@ import { DashboardPage } from "./pages/DashboardPage";
 import { LoginPage } from "./pages/LoginPage";
 import { RootRedirect } from "./pages/RootRedirect";
 
-const allRoles = ["ADMIN", "TEACHER", "STUDENT_FAMILY"] as const;
+const allRoles = ["ADMIN", "TEACHER", "STUDENT_FAMILY", "STAFF"] as const;
 
 const authFeature: FeatureModule = {
   id: "foundation-auth",

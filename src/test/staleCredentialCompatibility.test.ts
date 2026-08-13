@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { initializeSeedData } from "../core/data/seedService";
 import { storageKeys } from "../core/storage/storageKeys";
-import { authService, AuthenticationError } from "../features/auth/services/authService";
+import { authService } from "../features/auth/services/authService";
 
 const legacyUsers = [
   {
@@ -24,7 +24,7 @@ const legacyCredentials = [
   },
 ];
 
-describe("compatibilidad con datos del prototipo anterior", () => {
+describe("migración aditiva de cuentas", () => {
   beforeEach(() => {
     localStorage.clear();
     sessionStorage.clear();
@@ -32,18 +32,26 @@ describe("compatibilidad con datos del prototipo anterior", () => {
     localStorage.setItem(storageKeys.credentials, JSON.stringify(legacyCredentials));
   });
 
-  it("migra las cuentas antiguas y habilita las credenciales actuales", async () => {
+  it("conserva cuentas guardadas y agrega solamente cuentas ausentes", async () => {
+    await initializeSeedData();
     await initializeSeedData();
 
-    await expect(
-      authService.login("admin@escuela.test", "admin123"),
-    ).rejects.toBeInstanceOf(AuthenticationError);
+    const users = JSON.parse(localStorage.getItem(storageKeys.users) ?? "[]") as typeof legacyUsers;
+    const credentials = JSON.parse(
+      localStorage.getItem(storageKeys.credentials) ?? "[]",
+    ) as typeof legacyCredentials;
 
-    const user = await authService.login(
-      "admin@colegiohorizonte.edu.cr",
-      "Admin2026!",
+    expect(users.filter((user) => user.id === "usr_admin_001")).toEqual(legacyUsers);
+    expect(users.filter((user) => user.id === "usr_staff_001")).toHaveLength(1);
+    expect(credentials.filter((item) => item.userId === "usr_admin_001")).toEqual(
+      legacyCredentials,
     );
-    expect(user.id).toBe("usr_admin_001");
-    expect(user.firstName).toBe("Elena");
+    expect(credentials.filter((item) => item.userId === "usr_staff_001")).toHaveLength(1);
+
+    const staffUser = await authService.login(
+      "personal@colegiohorizonte.edu.cr",
+      "Personal2026!",
+    );
+    expect(staffUser.role).toBe("STAFF");
   });
 });

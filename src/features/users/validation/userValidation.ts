@@ -26,7 +26,7 @@ export function validateUserForm(
   } else if (userRepository.emailExists(values.email, editingUserId)) {
     errors.email = "Ya existe un usuario con este correo institucional.";
   }
-  if (!(["ADMIN", "TEACHER", "STUDENT_FAMILY"] as UserRole[]).includes(values.role)) {
+  if (!(["ADMIN", "TEACHER", "STUDENT_FAMILY", "STAFF"] as UserRole[]).includes(values.role)) {
     errors.role = "Selecciona un rol válido.";
   }
   if (values.role === "STUDENT_FAMILY" && !values.relatedStudentId.trim()) {
