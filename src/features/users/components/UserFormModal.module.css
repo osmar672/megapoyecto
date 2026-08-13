@@ -1,0 +1,10 @@
+.backdrop { position: fixed; z-index: 50; inset: 0; display: grid; place-items: center; padding: var(--space-5); background: rgba(7,25,42,0.58); backdrop-filter: blur(4px); }
+.modal { width: min(100%, 42rem); max-height: calc(100vh - 2rem); overflow: auto; border-radius: var(--radius-lg); background: white; box-shadow: 0 28px 80px rgba(5, 25, 42, 0.28); }
+.header { display: flex; justify-content: space-between; gap: var(--space-4); align-items: flex-start; padding: var(--space-6); border-bottom: 1px solid var(--color-line); }
+.header p { margin: 0 0 var(--space-2); color: var(--color-brand); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+.header h2 { margin: 0; color: var(--color-brand-deep); font-size: 1.5rem; }
+.header > button { border: 0; padding: 0.5rem; color: var(--color-ink-soft); background: transparent; cursor: pointer; }
+.form { display: grid; gap: var(--space-5); padding: var(--space-6); }
+.twoColumns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.footer { display: flex; justify-content: flex-end; gap: var(--space-3); padding-top: var(--space-2); }
+@media (max-width: 560px) { .backdrop { padding: 0; align-items: end; } .modal { max-height: 94vh; border-radius: var(--radius-lg) var(--radius-lg) 0 0; } .twoColumns { grid-template-columns: 1fr; } .footer { flex-direction: column-reverse; } }
