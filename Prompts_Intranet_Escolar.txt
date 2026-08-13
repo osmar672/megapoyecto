@@ -1,0 +1,1204 @@
+PROMPT 1 — BASE DE LA INTRANET ESCOLAR
+
+Quiero que desarrolles la primera etapa de una intranet escolar moderna y funcional utilizando únicamente:
+
+- HTML5
+- CSS3
+- JavaScript
+- LocalStorage para almacenar datos temporalmente
+- Font Awesome mediante CDN para iconos
+- Chart.js solamente si se necesita para algún gráfico
+
+NO utilizar:
+
+- React
+- Angular
+- Vue
+- Node.js
+- Frameworks CSS
+
+El proyecto debe organizarse correctamente en archivos como:
+
+- index.html
+- styles.css
+- app.js
+
+Si consideras necesario dividir JavaScript en varios archivos para organizar mejor el proyecto, puedes hacerlo.
+
+OBJETIVO
+
+Crear la estructura principal de una intranet para un colegio público.
+
+Debe ser una aplicación web moderna, profesional, responsive y fácil de utilizar.
+
+No quiero únicamente diseño visual. Los botones, formularios, filtros, navegación y módulos deben funcionar.
+
+1. LOGIN
+
+Crear una pantalla de inicio de sesión moderna con:
+
+- Logo del colegio
+- Correo o identificación
+- Contraseña
+- Mostrar/ocultar contraseña
+- Recordar usuario
+- Recuperar contraseña
+- Botón Iniciar sesión
+- Validaciones
+- Mensajes de error
+- Loader al iniciar sesión
+
+Agregar animaciones suaves:
+
+- Entrada del formulario
+- Animaciones en los campos
+- Animación al iniciar sesión correctamente
+- Transición desde el login hacia el dashboard
+
+Agregar usuarios de demostración para diferentes roles:
+
+- Administrador
+- Docente
+- Estudiante
+- Familiar
+
+El contenido disponible debe cambiar dependiendo del rol.
+
+2. DASHBOARD
+
+Crear un dashboard moderno con:
+
+- Sidebar
+- Header
+- Buscador
+- Notificaciones
+- Avatar
+- Nombre del usuario
+- Rol
+- Tarjetas informativas
+- Accesos rápidos
+
+Mostrar:
+
+- Próxima clase
+- Actividades próximas
+- Avisos importantes
+- Horario del día
+- Estado del transporte
+- Logros recientes
+
+Agregar animaciones suaves al entrar al dashboard.
+
+3. GESTIÓN DE USUARIOS
+
+El administrador debe poder:
+
+- Crear usuarios
+- Editar usuarios
+- Eliminar usuarios
+- Buscar usuarios
+- Filtrar usuarios
+
+Tipos:
+
+- Administrador
+- Docente
+- Estudiante
+- Familiar
+
+Cada usuario tendrá:
+
+- Nombre
+- Identificación
+- Correo
+- Rol
+- Estado
+- Avatar
+- Grado o departamento cuando corresponda
+
+Guardar los usuarios utilizando LocalStorage.
+
+4. PERFILES
+
+Crear perfiles de usuarios.
+
+El usuario podrá ver:
+
+- Avatar
+- Nombre
+- Grado
+- Sección
+- Intereses
+- Actividades
+- Logros
+
+Agregar una animación al entrar al perfil.
+
+Agregar buscador para visualizar perfiles de otros estudiantes.
+
+Cuando se seleccione otro estudiante:
+
+- Mostrar su perfil mediante una transición o animación.
+- Mostrar solamente información pública.
+- Nunca mostrar datos sensibles innecesarios.
+
+5. AVATARES
+
+Crear un sistema sencillo para personalizar el avatar.
+
+Permitir seleccionar:
+
+- Avatar
+- Fondo
+- Color
+- Accesorio
+
+Puede utilizar inicialmente diferentes imágenes o SVG predefinidos.
+
+Guardar la selección con LocalStorage.
+
+6. HORARIO
+
+Crear horario escolar.
+
+Mostrar:
+
+- Lunes
+- Martes
+- Miércoles
+- Jueves
+- Viernes
+
+Cada clase debe mostrar:
+
+- Materia
+- Profesor
+- Aula
+- Hora inicial
+- Hora final
+
+Agregar:
+
+- Vista diaria
+- Vista semanal
+
+Destacar la clase actual según la hora.
+
+7. MÓDULO ACADÉMICO
+
+Crear un módulo académico básico.
+
+El docente puede:
+
+- Registrar calificaciones
+- Modificar calificaciones
+- Registrar asistencia
+
+El estudiante y familiar pueden:
+
+- Consultar las calificaciones correspondientes
+- Consultar asistencia
+
+Los estudiantes NO deben poder modificar calificaciones.
+
+8. CENTRO DE AVISOS
+
+Crear un tablón digital.
+
+Los administradores o docentes autorizados pueden crear:
+
+- Avisos
+- Comunicados
+- Noticias
+- Cambios de horario
+- Actividades
+
+Cada aviso tendrá prioridad:
+
+- Normal
+- Importante
+- Urgente
+
+Los avisos deben aparecer también en el Dashboard.
+
+Si se crea un aviso urgente:
+
+- Mostrarlo destacado.
+- Crear automáticamente una notificación.
+
+9. NOTIFICACIONES
+
+Crear un sistema de notificaciones.
+
+Mostrar un icono de campana con contador.
+
+Permitir:
+
+- Ver notificaciones
+- Marcar como leídas
+- Marcar todas como leídas
+
+Ejemplos:
+
+- Nuevo aviso
+- Cambio de horario
+- Calificación publicada
+- Actividad nueva
+
+10. DATOS COMPARTIDOS
+
+Los módulos NO deben funcionar aisladamente.
+
+Ejemplo:
+
+Si se crea un aviso:
+
+1. Debe guardarse en LocalStorage.
+2. Debe aparecer en Avisos.
+3. Debe aparecer en Dashboard.
+4. Debe generar una notificación.
+
+Si un docente cambia una nota:
+
+1. Debe guardarse.
+2. El estudiante debe verla.
+3. Debe generarse una notificación.
+
+Centralizar los datos y evitar duplicación innecesaria.
+
+11. DISEÑO
+
+Quiero una apariencia de plataforma educativa moderna.
+
+Utilizar:
+
+- Sidebar
+- Cards
+- Modales
+- Iconos
+- Tooltips
+- Toasts
+- Dropdowns
+- Tablas modernas
+- Animaciones
+- Diseño responsive
+
+NO utilizar emojis como iconos principales.
+
+12. DATOS DE PRUEBA
+
+Agregar datos ficticios suficientes para comprobar el funcionamiento:
+
+- 15 estudiantes
+- 5 profesores
+- 2 administradores
+- Familias
+- Horarios completos
+- Calificaciones
+- Asistencias
+- 10 avisos
+- Notificaciones
+
+No dejar módulos vacíos.
+
+IMPORTANTE
+
+Esta es la primera etapa del proyecto.
+
+Priorizar:
+
+1. Funcionalidad
+2. Organización
+3. Navegación
+4. Persistencia de datos
+5. Diseño
+6. Animaciones
+
+Entrégame primero la estructura de archivos.
+
+Después proporciona el código completo de cada archivo.
+
+NO utilices frases como:
+
+"el resto sería similar"
+
+"puedes completar esto"
+
+"agrega aquí..."
+
+Quiero código completo y ejecutable.
+
+No agregues todavía foro, buses, mapa, emergencias, IA ni estadísticas porque se agregarán en la siguiente etapa.
+
+
+============================================================
+
+
+PROMPT 2 — FUNCIONES AVANZADAS DE LA INTRANET ESCOLAR
+
+Tengo una intranet escolar creada utilizando HTML, CSS y JavaScript.
+
+Ahora quiero desarrollar la segunda etapa, agregando nuevas funciones SIN eliminar, sustituir ni dañar ninguna función existente.
+
+Antes de realizar cambios:
+
+1. Analiza la estructura actual.
+2. Conserva el Login.
+3. Conserva los roles.
+4. Conserva el Dashboard.
+5. Conserva usuarios.
+6. Conserva perfiles.
+7. Conserva horarios.
+8. Conserva calificaciones.
+9. Conserva asistencia.
+10. Conserva avisos.
+11. Conserva notificaciones.
+12. Conserva LocalStorage.
+
+Todas las nuevas funciones deben integrarse con los datos existentes.
+
+1. ACCESIBILIDAD
+
+Crear un centro de accesibilidad.
+
+Debe permitir activar:
+
+- Alto contraste
+- Texto grande
+- Texto pequeño
+- Fuente de alta legibilidad
+- Subrayar enlaces
+- Mayor separación entre letras
+- Reducir movimiento
+- Leer página
+- Detener lectura
+
+Usar HTML semántico correctamente.
+
+Agregar:
+
+- aria-label cuando sea necesario
+- alt en imágenes
+- labels en formularios
+- navegación completa mediante teclado
+- focus visible
+- Skip to content
+
+La web debe poder utilizarse lo mejor posible mediante lectores de pantalla.
+
+2. MODO PARA PERSONAS CON SENSIBILIDAD AL MOVIMIENTO O EPILEPSIA
+
+Agregar la opción:
+
+Reducir animaciones
+
+Cuando esté activa:
+
+- Eliminar parpadeos
+- Eliminar flashes
+- Evitar animaciones rápidas
+- Reducir transiciones
+- Detener movimientos decorativos
+
+Utilizar también:
+
+prefers-reduced-motion
+
+No utilizar contenido que parpadee repetidamente.
+
+Guardar esta preferencia mediante LocalStorage.
+
+3. ASISTENTE IA
+
+Agregar un asistente virtual mediante un botón flotante.
+
+Al seleccionarlo abrir una ventana de chat.
+
+Debe poder responder preguntas relacionadas con los datos de la intranet.
+
+Ejemplos:
+
+- ¿Cuál es mi próxima clase?
+- ¿Qué tengo mañana?
+- ¿Cuáles son los avisos importantes?
+- ¿A qué hora sale mi bus?
+- ¿Qué vende la soda?
+- ¿Dónde está la biblioteca?
+- ¿Cuáles son mis próximas actividades?
+- ¿Qué calificaciones tengo?
+
+El asistente debe consultar los datos del sistema.
+
+Crear inicialmente respuestas funcionales mediante JavaScript.
+
+Pero separar la lógica de manera que posteriormente pueda conectarse una API real de IA.
+
+NO colocar ninguna API Key directamente en el frontend.
+
+4. FORO
+
+Crear un foro interno.
+
+Permitir:
+
+- Crear publicaciones
+- Comentar
+- Responder
+- Dar reacciones
+- Reportar contenido
+- Buscar publicaciones
+
+Categorías:
+
+- General
+- Académico
+- Deportes
+- Tecnología
+- Actividades
+- Clubes
+- Ayuda
+
+Mostrar:
+
+- Autor
+- Avatar
+- Fecha
+- Categoría
+- Comentarios
+
+Los administradores deben poder:
+
+- Eliminar publicaciones
+- Ocultar contenido
+- Revisar reportes
+
+Guardar publicaciones y comentarios.
+
+5. SISTEMA DE LOGROS
+
+Crear logros como:
+
+- Primera semana
+- Asistencia perfecta
+- Excelente rendimiento
+- Participación deportiva
+- Participación cultural
+- Participación académica
+- Ayuda a compañeros
+- Participación comunitaria
+
+Mostrar:
+
+- Logros obtenidos
+- Logros bloqueados
+- Progreso
+- Insignias
+
+Cuando se obtenga uno:
+
+- Mostrar notificación
+- Mostrar pequeña animación
+
+Si está activo Reducir movimiento, no mostrar la animación.
+
+6. INCIDENCIAS
+
+Crear sistema para reportar problemas.
+
+Categorías:
+
+- Tecnología
+- Infraestructura
+- Transporte
+- Aula
+- Limpieza
+- Seguridad
+- Convivencia
+- Otro
+
+Formulario:
+
+- Categoría
+- Título
+- Descripción
+- Lugar
+- Fecha
+- Prioridad
+
+Estados:
+
+- Recibida
+- En revisión
+- En proceso
+- Resuelta
+- Cerrada
+
+El estudiante puede ver sus incidencias.
+
+El administrador puede cambiar el estado.
+
+Cuando cambie:
+
+- Actualizar la incidencia
+- Crear notificación para el estudiante
+
+7. LÍNEA DE TIEMPO
+
+Crear una línea de tiempo interactiva.
+
+Mostrar:
+
+- Exámenes
+- Vacaciones
+- Ferias
+- Actividades
+- Eventos deportivos
+- Reuniones
+- Simulacros
+- Matrícula
+- Días especiales
+
+Filtros:
+
+- Hoy
+- Semana
+- Mes
+- Año
+
+Los próximos eventos deben destacarse.
+
+8. MAPA VIRTUAL DEL COLEGIO
+
+Crear un mapa interactivo ilustrado del colegio.
+
+Mostrar:
+
+- Dirección
+- Aulas
+- Biblioteca
+- Laboratorios
+- Gimnasio
+- Cancha
+- Soda
+- Enfermería
+- Baños
+- Parqueo
+- Entradas
+- Salidas
+- Punto de reunión
+
+Al seleccionar un lugar mostrar información.
+
+Agregar buscador:
+
+"¿Dónde está...?"
+
+Utilizar datos ficticios que posteriormente puedan cambiarse por el mapa real.
+
+9. TRANSPORTE
+
+Crear módulo de buses.
+
+Mostrar:
+
+- Número
+- Ruta
+- Conductor
+- Próxima parada
+- Hora estimada
+- Estado
+
+Estados:
+
+- En ruta
+- Próximo
+- Retrasado
+- Finalizado
+
+Crear una simulación de movimiento del bus mediante JavaScript.
+
+No afirmar que existe GPS real.
+
+Preparar una función separada para posteriormente conectarla con una API de ubicación.
+
+10. HORARIOS DE BUSES
+
+Mostrar:
+
+- Número de bus
+- Ruta
+- Salida
+- Paradas
+- Hora estimada por parada
+- Llegada
+- Regreso
+
+Filtros:
+
+- Mañana
+- Tarde
+
+Agregar buscador.
+
+11. SODA / CAFETERÍA
+
+Crear catálogo de productos.
+
+Cada producto debe mostrar:
+
+- Imagen
+- Nombre
+- Precio
+- Categoría
+- Disponibilidad
+
+Categorías:
+
+- Comidas
+- Bebidas
+- Snacks
+- Postres
+- Saludable
+
+Estados:
+
+- Disponible
+- Pocas unidades
+- Agotado
+
+Agregar:
+
+- Buscador
+- Filtros
+- Favoritos
+
+12. CENTRO DE EMERGENCIAS
+
+Crear una sección llamada:
+
+Centro de Emergencias
+
+Mostrar el estado institucional:
+
+- NORMAL
+- PRECAUCIÓN
+- EMERGENCIA
+
+Mostrar información sobre:
+
+- Simulacros
+- Evacuación
+- Terremoto
+- Incendio
+- Emergencias médicas
+- Incidentes críticos de seguridad
+
+Agregar:
+
+- Protocolos oficiales
+- Punto de reunión
+- Avisos de emergencia
+
+Si un administrador cambia el estado a EMERGENCIA:
+
+1. Mostrar una alerta destacada.
+2. Generar notificación.
+3. Mostrarla en Dashboard.
+4. Mostrar únicamente instrucciones institucionales previamente definidas.
+
+No crear instrucciones ofensivas ni mecanismos para enfrentarse físicamente a una amenaza.
+
+13. INTEGRACIÓN
+
+Todo debe compartir información.
+
+Ejemplos:
+
+Una actividad nueva debe aparecer en:
+
+- Línea de tiempo
+- Dashboard
+- Notificaciones
+
+Una emergencia debe aparecer en:
+
+- Centro de Emergencias
+- Dashboard
+- Notificaciones
+
+Una incidencia actualizada debe aparecer en:
+
+- Incidencias
+- Notificaciones
+
+IMPORTANTE
+
+No reconstruyas el proyecto desde cero.
+
+Trabaja sobre el código existente.
+
+No elimines funciones que ya estaban trabajando.
+
+Entrega los archivos completos que necesiten modificaciones y los nuevos archivos necesarios.
+
+Si un archivo no necesita cambios, indícalo.
+
+Todas las funciones deben ser demostrables sin necesidad de backend.
+
+
+============================================================
+
+
+PROMPT 3 — INTEGRACIÓN FINAL, ESTADÍSTICAS Y DOCUMENTACIÓN
+
+Quiero completar la tercera y última etapa de mi intranet escolar.
+
+Actualmente el proyecto ya contiene:
+
+- Login por roles
+- Dashboard
+- Usuarios
+- Perfiles
+- Avatares
+- Horarios
+- Calificaciones
+- Asistencia
+- Avisos
+- Notificaciones
+- Accesibilidad
+- Asistente IA
+- Foro
+- Logros
+- Incidencias
+- Línea de tiempo
+- Mapa
+- Transporte
+- Buses
+- Soda
+- Centro de Emergencias
+
+NO elimines ni reconstruyas funciones que ya existen.
+
+El objetivo es integrar, mejorar, completar y documentar el sistema.
+
+PARTE 1 — ESTADÍSTICAS
+
+Crear un módulo administrativo de estadísticas.
+
+Nuevos registros
+
+Mostrar mediante gráficos:
+
+- Registrados hoy
+- Esta semana
+- Este mes
+- Este año
+
+Crear gráfico por meses.
+
+Abandono estudiantil
+
+Mostrar:
+
+- Abandonos por mes
+- Abandonos por año
+- Abandonos por nivel
+
+Utilizar Chart.js.
+
+Agregar:
+
+- Tooltips
+- Leyendas
+- Filtros
+- Selector de año
+
+Los gráficos deben ser accesibles.
+
+Agregar también una representación textual o tabla para usuarios que no puedan interpretar gráficos visuales.
+
+PARTE 2 — BÚSQUEDA GLOBAL
+
+Crear buscador en el Header.
+
+Debe permitir encontrar:
+
+- Usuarios
+- Estudiantes
+- Profesores
+- Eventos
+- Avisos
+- Horarios
+- Productos
+- Rutas
+- Publicaciones
+- Lugares del colegio
+
+Mostrar resultados agrupados por categoría.
+
+PARTE 3 — MEJORAR DASHBOARD
+
+Mejorar el Dashboard para mostrar información relevante según el rol.
+
+Estudiante
+
+- Próxima clase
+- Notas
+- Asistencia
+- Próximos eventos
+- Bus
+- Avisos
+- Logros
+
+Docente
+
+- Próximas clases
+- Estudiantes
+- Asistencia pendiente
+- Calificaciones
+- Avisos
+
+Familiar
+
+- Información de su estudiante
+- Notas
+- Asistencia
+- Avisos
+- Eventos
+
+Administrador
+
+- Usuarios
+- Incidencias
+- Registros
+- Estadísticas
+- Emergencias
+- Avisos
+
+PARTE 4 — NAVEGACIÓN FINAL
+
+El sidebar debe contener según permisos:
+
+- Inicio
+- Mi perfil
+- Estudiantes
+- Académico
+- Horarios
+- Línea de tiempo
+- Transporte
+- Soda
+- Mapa
+- Foro
+- Logros
+- Incidencias
+- Avisos
+- Emergencias
+- Estadísticas
+- Asistente IA
+- Configuración
+- Cerrar sesión
+
+No mostrar módulos administrativos a usuarios sin permisos.
+
+PARTE 5 — RESPONSIVE
+
+Revisar completamente:
+
+- Desktop
+- Laptop
+- Tablet
+- Teléfono
+
+En móvil:
+
+- Sidebar colapsable
+- Menú hamburguesa
+- Cards adaptables
+- Tablas con scroll o representación móvil
+- Modales correctamente centrados
+- Botones fáciles de pulsar
+
+PARTE 6 — ANIMACIONES
+
+Mejorar:
+
+- Login
+- Entrada al Dashboard
+- Perfiles
+- Modales
+- Notificaciones
+- Tarjetas
+- Cambio entre secciones
+- Logros
+
+Las animaciones deben ser suaves.
+
+Si está activado:
+
+prefers-reduced-motion
+
+o el modo:
+
+Reducir animaciones
+
+deben desaparecer o reducirse.
+
+PARTE 7 — MODO CLARO, OSCURO Y CONTRASTE
+
+Crear:
+
+- Modo claro
+- Modo oscuro
+- Alto contraste
+
+Guardar selección utilizando LocalStorage.
+
+Todas las pantallas deben adaptarse correctamente.
+
+PARTE 8 — SEGURIDAD Y PRIVACIDAD
+
+Revisar que:
+
+- Los estudiantes solamente vean sus propios datos académicos.
+- Las familias solamente vean los estudiantes asociados.
+- Los docentes vean la información necesaria.
+- Los administradores tengan las opciones administrativas.
+- No se expongan datos sensibles innecesarios.
+- No se almacenen contraseñas reales en texto plano.
+
+Como es un prototipo frontend, los usuarios demostrativos pueden utilizar credenciales ficticias claramente identificadas como datos de prueba.
+
+PARTE 9 — DATOS COMPARTIDOS
+
+Revisar todo el proyecto.
+
+No quiero datos duplicados sin necesidad.
+
+Centralizar la información.
+
+Ejemplos:
+
+Un aviso nuevo debe reflejarse automáticamente en:
+
+- Avisos
+- Dashboard
+- Notificaciones
+
+Una incidencia:
+
+- Incidencias
+- Dashboard administrativo
+- Notificaciones
+
+Un evento:
+
+- Línea de tiempo
+- Dashboard
+- Asistente IA
+
+Un producto agotado:
+
+- Soda
+- Asistente IA
+
+Un cambio de bus:
+
+- Transporte
+- Dashboard
+- Asistente IA
+
+PARTE 10 — DOCUMENTACIÓN MARKDOWN
+
+Además del código, necesito documentación completa en Markdown.
+
+Crear:
+
+README.md
+
+Debe contener:
+
+- Nombre del proyecto
+- Descripción
+- Características
+- Tecnologías
+- Instalación paso a paso
+- Cómo ejecutar
+- Usuarios de demostración
+- Ejemplo de uso
+- Estructura del proyecto
+- Licencia
+
+Crear:
+
+CONTRIBUTING.md
+
+Debe explicar:
+
+- Cómo colaborar
+- Uso de ramas
+- Commits
+- Pull Requests
+- Revisión de cambios
+
+Crear:
+
+CHANGELOG.md
+
+Debe tener historial organizado de versiones.
+
+Por ejemplo:
+
+- v0.1 — Base
+- v0.2 — Módulos avanzados
+- v1.0 — Proyecto completo
+
+Crear:
+
+docs/arquitectura.md
+
+Explicar:
+
+- Arquitectura
+- HTML
+- CSS
+- JavaScript
+- LocalStorage
+- Organización
+- Flujo de datos
+- Decisiones técnicas
+
+Crear:
+
+docs/requerimientos.md
+
+Utilizar listas Markdown de tareas:
+
+- [x] Login
+- [x] Roles
+- [x] Usuarios
+- [x] Académico
+- [x] Avisos
+- etc.
+
+Separar:
+
+- Requerimientos funcionales
+- Requerimientos no funcionales
+
+PARTE 11 — AGENTS.MD
+
+Crear:
+
+AGENTS.md
+
+Este archivo debe servir como memoria para otro asistente de inteligencia artificial.
+
+Debe tener exactamente estas siete secciones:
+
+1. Contexto
+2. Requerimientos
+3. Reglas
+4. Restricciones
+5. Objetivos
+6. Memoria del proyecto
+7. Buenas prácticas
+
+En Restricciones incluir:
+
+- No eliminar funciones existentes.
+- No exponer datos privados.
+- No poner API Keys en frontend.
+- No sustituir tecnologías sin autorización.
+
+PARTE 12 — CALIDAD DEL MARKDOWN
+
+Los archivos Markdown deben demostrar:
+
+- Encabezados
+- Negritas
+- Cursivas
+- Listas
+- Listas numeradas
+- Listas de tareas
+- Enlaces
+- Imágenes con texto alternativo
+- Bloques de código
+- Tablas
+- Citas
+- Separadores
+
+Utilizar GitHub Flavored Markdown.
+
+Utilizar únicamente un H1 por documento.
+
+PARTE 13 — GIT
+
+Preparar una propuesta de historial de commits realista.
+
+NO quiero un único commit final.
+
+Ejemplo:
+
+feat: crear estructura inicial
+feat: agregar autenticacion por roles
+feat: agregar modulo academico
+feat: implementar centro de avisos
+feat: agregar transporte y mapa
+feat: agregar accesibilidad
+feat: agregar estadisticas
+docs: agregar documentacion markdown
+fix: corregir navegacion responsive
+
+También indicar una estrategia sencilla de ramas para un proyecto universitario.
+
+PARTE 14 — REVISIÓN FINAL
+
+Antes de terminar revisa que:
+
+- Login funcione
+- Roles funcionen
+- Navegación funcione
+- Botones funcionen
+- Modales funcionen
+- Filtros funcionen
+- Búsqueda funcione
+- LocalStorage funcione
+- Horarios funcionen
+- Avisos funcionen
+- Foro funcione
+- Incidencias funcionen
+- Logros funcionen
+- Soda funcione
+- Transporte funcione
+- Mapa funcione
+- Emergencias funcionen
+- Estadísticas funcionen
+- Accesibilidad funcione
+- Modo oscuro funcione
+- Responsive funcione
+
+No quiero botones decorativos sin funcionamiento.
+
+ENTREGA
+
+Entrégame:
+
+1. Estructura final del proyecto.
+2. Archivos nuevos.
+3. Archivos modificados.
+4. Código completo.
+5. Documentación Markdown.
+6. Propuesta de commits.
+7. Instrucciones para probar el sistema.
+
+Nunca sustituyas código mediante frases como:
+
+"resto del código"
+
+"etc."
+
+"puedes agregar..."
+
+Necesito implementaciones completas.
+
+Conserva todo lo que ya funciona y modifica únicamente lo necesario.
