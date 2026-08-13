@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="360" viewBox="0 0 960 360" role="img" aria-labelledby="title desc">
+  <title id="title">Arquitectura de comunicados y panel</title>
+  <desc id="desc">Diagrama con registro automático de módulos, comunicados, panel y almacenamiento compartido.</desc>
+  <rect width="960" height="360" fill="#f5f7fa"/>
+  <g font-family="Arial, sans-serif" fill="#1f2937">
+    <rect x="40" y="120" width="210" height="110" rx="12" fill="#ffffff" stroke="#64748b"/>
+    <text x="145" y="155" font-size="18" text-anchor="middle" font-weight="700">Registro de módulos</text>
+    <text x="145" y="185" font-size="14" text-anchor="middle">import.meta.glob</text>
+    <text x="145" y="207" font-size="14" text-anchor="middle">FeatureModule</text>
+
+    <rect x="375" y="50" width="210" height="110" rx="12" fill="#ffffff" stroke="#64748b"/>
+    <text x="480" y="85" font-size="18" text-anchor="middle" font-weight="700">Comunicados</text>
+    <text x="480" y="115" font-size="14" text-anchor="middle">Permisos, filtros</text>
+    <text x="480" y="137" font-size="14" text-anchor="middle">publicación y borradores</text>
+
+    <rect x="375" y="205" width="210" height="110" rx="12" fill="#ffffff" stroke="#64748b"/>
+    <text x="480" y="240" font-size="18" text-anchor="middle" font-weight="700">Panel principal</text>
+    <text x="480" y="270" font-size="14" text-anchor="middle">Métricas puras</text>
+    <text x="480" y="292" font-size="14" text-anchor="middle">por rol</text>
+
+    <rect x="710" y="120" width="210" height="110" rx="12" fill="#ffffff" stroke="#64748b"/>
+    <text x="815" y="155" font-size="18" text-anchor="middle" font-weight="700">Datos compartidos</text>
+    <text x="815" y="185" font-size="14" text-anchor="middle">localStorage</text>
+    <text x="815" y="207" font-size="14" text-anchor="middle">sessionStorage</text>
+
+    <path d="M250 175 H350" stroke="#334155" stroke-width="2" fill="none"/>
+    <path d="M350 175 V105 H375" stroke="#334155" stroke-width="2" fill="none"/>
+    <path d="M350 175 V260 H375" stroke="#334155" stroke-width="2" fill="none"/>
+    <path d="M585 105 H650 V175 H710" stroke="#334155" stroke-width="2" fill="none"/>
+    <path d="M585 260 H650 V175" stroke="#334155" stroke-width="2" fill="none"/>
+  </g>
+</svg>

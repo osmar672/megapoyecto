@@ -1,0 +1,784 @@
+PROMPT 2 — FUNCIONES AVANZADAS DE LA INTRANET ESCOLAR
+
+CONTRATO CENTRAL DE INTEGRACIÓN — OBLIGATORIO PARA LAS 3 COMPUTADORAS
+
+Este proyecto será desarrollado por separado en tres computadoras y después se unirán los resultados. Por esa razón, la compatibilidad entre módulos es una restricción obligatoria y tiene prioridad sobre cualquier preferencia de organización distinta.
+
+1. ÚNICO ESPACIO GLOBAL PERMITIDO
+
+Todos los scripts deben utilizar exclusivamente este objeto global compartido:
+
+window.SCHOOL_INTRANET = window.SCHOOL_INTRANET || {};
+
+Está PROHIBIDO crear otras variables, constantes o funciones globales propias del proyecto.
+
+Cada etapa debe trabajar dentro de su propio módulo:
+
+- Computadora 1 / Prompt 1: SCHOOL_INTRANET.modules.p1
+- Computadora 2 / Prompt 2: SCHOOL_INTRANET.modules.p2
+- Computadora 3 / Prompt 3: SCHOOL_INTRANET.modules.p3
+
+Usar un IIFE, closure o estructura equivalente para que let, const, funciones auxiliares, selectores, cache DOM y estado interno queden encapsulados.
+
+Ejemplo de patrón obligatorio:
+
+(function (APP) {
+    'use strict';
+    APP.modules = APP.modules || {};
+    APP.modules.pX = APP.modules.pX || {};
+    const MODULE = APP.modules.pX;
+    // Todo el código de esta etapa queda dentro de este scope.
+})(window.SCHOOL_INTRANET = window.SCHOOL_INTRANET || {});
+
+No declarar en el scope global nombres genéricos como:
+
+- data
+- users
+- state
+- currentUser
+- init
+- render
+- save
+- load
+- modal
+- notifications
+- events
+- config
+- settings
+
+2. PREFIJOS OBLIGATORIOS
+
+Cada etapa tiene un prefijo exclusivo:
+
+- Prompt 1: p1-
+- Prompt 2: p2-
+- Prompt 3: p3-
+
+Aplicarlo a TODO elemento nuevo que pertenezca exclusivamente a esa etapa:
+
+- id HTML: p1-login-form, p2-forum-modal, p3-stats-chart
+- clases CSS: p1-card, p2-forum-post, p3-stat-card
+- variables CSS: --p1-sidebar-width, --p2-forum-gap, --p3-chart-height
+- data attributes: data-p1-action, data-p2-category, data-p3-filter
+- nombres de animaciones CSS: p1-fade-in, p2-achievement-pop, p3-section-enter
+- claves internas de cache o dataset no compartidas
+
+Nunca utilizar IDs genéricos como #modal, #search, #dashboard, #form, #table o #content.
+
+3. ARCHIVOS — PROPIEDAD EXCLUSIVA
+
+Ninguna computadora debe reemplazar archivos que pertenecen a otra etapa.
+
+Prompt 1 es propietario de:
+- index.html
+- css/p1-core.css
+- js/p1-core.js
+
+Prompt 2 es propietario de:
+- css/p2-advanced.css
+- js/p2-advanced.js
+
+Prompt 3 es propietario de:
+- css/p3-final.css
+- js/p3-final.js
+- README.md
+- CONTRIBUTING.md
+- CHANGELOG.md
+- AGENTS.md
+- docs/arquitectura.md
+- docs/requerimientos.md
+
+No generar alternativamente app.js, styles.css, script.js, main.js u otros archivos genéricos que puedan sobrescribir el trabajo de otra computadora.
+
+El Prompt 1 debe dejar estos puntos de integración estables en index.html y no renombrarlos posteriormente:
+
+- #p1-app-root
+- #p1-sidebar-nav
+- #p1-header-actions
+- #p1-main-content
+- #p1-dashboard-widgets
+- #p1-global-overlays
+
+Prompt 2 y Prompt 3 deben insertar o montar sus interfaces usando esos puntos de integración mediante JavaScript, sin reemplazar el HTML base completo.
+
+4. CLAVES DE LOCALSTORAGE — NOMBRES EXACTOS
+
+Usar SOLAMENTE estas claves. No crear alias como users, usuarios, schoolUsers, app_users, etc.
+
+Datos base / Prompt 1:
+- intranet.v1.users
+- intranet.v1.session
+- intranet.v1.profiles
+- intranet.v1.avatarPreferences
+- intranet.v1.schedules
+- intranet.v1.grades
+- intranet.v1.attendance
+- intranet.v1.announcements
+- intranet.v1.notifications
+
+Datos avanzados / Prompt 2:
+- intranet.v1.accessibility
+- intranet.v1.forumPosts
+- intranet.v1.achievements
+- intranet.v1.incidents
+- intranet.v1.timelineEvents
+- intranet.v1.mapLocations
+- intranet.v1.transport
+- intranet.v1.busSchedules
+- intranet.v1.cafeteriaProducts
+- intranet.v1.cafeteriaFavorites
+- intranet.v1.emergencyStatus
+
+Preferencias finales / Prompt 3:
+- intranet.v1.theme
+- intranet.v1.statisticsPreferences
+- intranet.v1.globalSearchHistory
+
+Reglas:
+- No guardar una segunda copia de usuarios, avisos, horarios, calificaciones, buses, productos o eventos bajo otra clave.
+- Estadísticas y dashboard deben DERIVAR información de las claves existentes, no duplicarla.
+- Antes de leer JSON utilizar un fallback seguro.
+- Antes de escribir preservar los campos que no pertenecen al módulo actual.
+- Nunca ejecutar localStorage.clear().
+- Nunca borrar claves de otra etapa.
+
+5. IDENTIFICADORES DE ENTIDADES
+
+Utilizar IDs string estables y únicos:
+
+Prompt 1:
+- Usuarios: USR-0001
+- Horarios/clases: SCH-0001
+- Calificaciones: GRD-0001
+- Asistencias: ATT-0001
+- Avisos: ANN-0001
+- Notificaciones: NTF-0001
+
+Prompt 2:
+- Publicaciones: FOR-0001
+- Comentarios: COM-0001
+- Logros: ACH-0001
+- Incidencias: INC-0001
+- Eventos: EVT-0001
+- Lugares: LOC-0001
+- Buses: BUS-0001
+- Productos: PRD-0001
+- Emergencias/actualizaciones: EMG-0001
+
+No utilizar solamente índices de arrays como identidad permanente.
+Las relaciones entre módulos deben hacerse por ID, por ejemplo studentId: "USR-0012".
+
+6. ESQUEMAS COMPARTIDOS MÍNIMOS
+
+No cambiar estos nombres de campos cuando un módulo consuma datos creados por otro.
+
+Usuario:
+{
+  id, name, identification, email, role, status, avatar,
+  grade, section, department, interests, activities,
+  achievementIds, associatedStudentIds, createdAt, updatedAt
+}
+
+Sesión:
+{
+  userId, role, rememberUser, loginAt
+}
+
+Horario/clase:
+{
+  id, subject, teacherId, studentIds, classroom,
+  dayOfWeek, startTime, endTime, grade, section
+}
+
+Calificación:
+{
+  id, studentId, teacherId, subject, activity,
+  score, maxScore, publishedAt, updatedAt
+}
+
+Asistencia:
+{
+  id, studentId, teacherId, subject, date,
+  status, notes, updatedAt
+}
+
+Aviso:
+{
+  id, authorId, type, title, content, priority,
+  createdAt, updatedAt, targetRoles
+}
+
+Notificación:
+{
+  id, userId, type, title, message, sourceType,
+  sourceId, read, createdAt
+}
+
+Incidencia:
+{
+  id, reporterId, category, title, description, location,
+  date, priority, status, createdAt, updatedAt
+}
+
+Evento de línea de tiempo:
+{
+  id, title, type, description, startAt, endAt,
+  locationId, targetRoles, createdBy
+}
+
+Bus:
+{
+  id, number, route, driver, nextStop, estimatedTime,
+  status, stops, updatedAt
+}
+
+Producto de soda:
+{
+  id, name, image, price, category, availability, updatedAt
+}
+
+Estado de emergencia:
+{
+  id, status, title, message, protocolKey, updatedBy, updatedAt
+}
+
+Si una etapa necesita campos adicionales, puede agregarlos sin renombrar ni eliminar los campos compartidos.
+
+7. EVENTOS DE INTEGRACIÓN
+
+Para comunicar módulos sin llamadas directas entre archivos, usar CustomEvent sobre window.
+Los nombres reservados son:
+
+- intranet:session-changed
+- intranet:user-created
+- intranet:user-updated
+- intranet:user-deleted
+- intranet:grade-updated
+- intranet:attendance-updated
+- intranet:announcement-created
+- intranet:announcement-updated
+- intranet:notification-created
+- intranet:incident-updated
+- intranet:timeline-updated
+- intranet:transport-updated
+- intranet:product-updated
+- intranet:emergency-updated
+- intranet:theme-changed
+- intranet:data-refresh
+
+Enviar IDs y datos mínimos en event.detail. No pasar referencias DOM entre módulos.
+
+8. REGLAS DE FUNCIONES Y VARIABLES JAVASCRIPT
+
+- Toda variable debe declararse explícitamente con const o let.
+- Prohibido asignar variables sin declaración.
+- Evitar var.
+- No declarar dos funciones con el mismo nombre dentro del mismo módulo.
+- Las funciones públicas deben vivir dentro del namespace de su módulo.
+- Las funciones privadas deben permanecer dentro del closure.
+- No sobrescribir APP.modules.p1, APP.modules.p2 o APP.modules.p3 completos si ya existen; extenderlos.
+- No modificar prototypes nativos.
+- No usar onclick inline en HTML; usar addEventListener.
+- No depender de variables creadas accidentalmente por IDs HTML.
+
+9. CSS SIN COLISIONES
+
+- Prompt 1 puede definir tokens globales base bajo :root usando prefijo --app-*.
+- Prompt 2 y Prompt 3 pueden consumir --app-* con fallback, pero NO redefinirlos globalmente.
+- Prompt 2 solo crea variables --p2-*.
+- Prompt 3 solo crea variables --p3-*.
+- No usar selectores genéricos que afecten todo el proyecto como .card, .modal, .active, .hidden, .button, .container.
+- Usar siempre el prefijo de la etapa, por ejemplo .p2-modal o .p3-active.
+- Si se necesita una utilidad compartida existente de Prompt 1, reutilizarla sin redefinirla.
+
+10. REGISTRO DE VARIABLES Y COMPATIBILIDAD
+
+Cada computadora debe entregar adicionalmente un archivo de texto llamado según su etapa:
+
+- Prompt 1: P1_VARIABLE_REGISTRY.md
+- Prompt 2: P2_VARIABLE_REGISTRY.md
+- Prompt 3: P3_VARIABLE_REGISTRY.md
+
+Debe incluir una tabla con:
+
+| Nombre | Tipo | Scope/Namespace | Archivo | Propósito | LocalStorage relacionado | Compartido sí/no |
+
+Registrar como mínimo:
+- propiedades públicas del módulo
+- variables de estado importantes
+- funciones públicas
+- IDs HTML creados
+- clases CSS principales
+- claves LocalStorage usadas
+- CustomEvents emitidos/escuchados
+
+Antes de finalizar, revisar que ningún nombre propio de la etapa invada el namespace o prefijo de otra etapa.
+
+11. REGLA DE NO RECONSTRUCCIÓN
+
+Si falta una función perteneciente a otra computadora, NO crear una segunda implementación con otro nombre.
+Consumir el contrato definido arriba y dejar claramente indicada la dependencia en el registro de variables.
+
+12. ORDEN FINAL DE CARGA
+
+Al integrar el proyecto, los archivos deben cargarse en este orden:
+
+1. css/p1-core.css
+2. css/p2-advanced.css
+3. css/p3-final.css
+4. js/p1-core.js
+5. js/p2-advanced.js
+6. js/p3-final.js
+
+Todos los scripts deben utilizar defer o ejecutarse después de que el DOM esté disponible.
+
+
+REGLAS ESPECÍFICAS DEL PROMPT 2 — MÓDULOS AVANZADOS
+
+Esta computadora NO es propietaria de index.html ni del núcleo.
+Debe generar únicamente:
+- css/p2-advanced.css
+- js/p2-advanced.js
+- P2_VARIABLE_REGISTRY.md
+
+Namespace público reservado:
+SCHOOL_INTRANET.modules.p2
+
+Estructura pública sugerida y reservada:
+- SCHOOL_INTRANET.modules.p2.init
+- SCHOOL_INTRANET.modules.p2.accessibility
+- SCHOOL_INTRANET.modules.p2.assistant
+- SCHOOL_INTRANET.modules.p2.forum
+- SCHOOL_INTRANET.modules.p2.achievements
+- SCHOOL_INTRANET.modules.p2.incidents
+- SCHOOL_INTRANET.modules.p2.timeline
+- SCHOOL_INTRANET.modules.p2.map
+- SCHOOL_INTRANET.modules.p2.transport
+- SCHOOL_INTRANET.modules.p2.cafeteria
+- SCHOOL_INTRANET.modules.p2.emergency
+
+Variables internas importantes deben comenzar con p2 cuando su significado pueda confundirse al leer el código, por ejemplo:
+- p2State
+- p2AccessibilityState
+- p2ForumCache
+- p2IncidentCache
+- p2TransportCache
+- p2Dom
+
+Debe leer los usuarios, sesión, horarios, calificaciones, avisos y notificaciones desde las claves exactas del Prompt 1. No crear copias alternativas.
+
+Debe montar su navegación y vistas dinámicamente en los puntos de integración del Prompt 1. Si un punto no existe, registrar un error claro en consola y no recrear todo el dashboard.
+
+Cuando una función avanzada afecte información del núcleo, actualizar la clave compartida correspondiente y emitir el CustomEvent reservado.
+
+No crear estadísticas administrativas finales ni documentación general del proyecto; pertenecen al Prompt 3.
+
+
+Tengo una intranet escolar creada utilizando HTML, CSS y JavaScript.
+
+Ahora quiero desarrollar la segunda etapa, agregando nuevas funciones SIN eliminar, sustituir ni dañar ninguna función existente.
+
+Antes de realizar cambios:
+
+1. Analiza la estructura actual.
+2. Conserva el Login.
+3. Conserva los roles.
+4. Conserva el Dashboard.
+5. Conserva usuarios.
+6. Conserva perfiles.
+7. Conserva horarios.
+8. Conserva calificaciones.
+9. Conserva asistencia.
+10. Conserva avisos.
+11. Conserva notificaciones.
+12. Conserva LocalStorage.
+
+Todas las nuevas funciones deben integrarse con los datos existentes.
+
+1. ACCESIBILIDAD
+
+Crear un centro de accesibilidad.
+
+Debe permitir activar:
+
+- Alto contraste
+- Texto grande
+- Texto pequeño
+- Fuente de alta legibilidad
+- Subrayar enlaces
+- Mayor separación entre letras
+- Reducir movimiento
+- Leer página
+- Detener lectura
+
+Usar HTML semántico correctamente.
+
+Agregar:
+
+- aria-label cuando sea necesario
+- alt en imágenes
+- labels en formularios
+- navegación completa mediante teclado
+- focus visible
+- Skip to content
+
+La web debe poder utilizarse lo mejor posible mediante lectores de pantalla.
+
+2. MODO PARA PERSONAS CON SENSIBILIDAD AL MOVIMIENTO O EPILEPSIA
+
+Agregar la opción:
+
+Reducir animaciones
+
+Cuando esté activa:
+
+- Eliminar parpadeos
+- Eliminar flashes
+- Evitar animaciones rápidas
+- Reducir transiciones
+- Detener movimientos decorativos
+
+Utilizar también:
+
+prefers-reduced-motion
+
+No utilizar contenido que parpadee repetidamente.
+
+Guardar esta preferencia mediante LocalStorage.
+
+3. ASISTENTE IA
+
+Agregar un asistente virtual mediante un botón flotante.
+
+Al seleccionarlo abrir una ventana de chat.
+
+Debe poder responder preguntas relacionadas con los datos de la intranet.
+
+Ejemplos:
+
+- ¿Cuál es mi próxima clase?
+- ¿Qué tengo mañana?
+- ¿Cuáles son los avisos importantes?
+- ¿A qué hora sale mi bus?
+- ¿Qué vende la soda?
+- ¿Dónde está la biblioteca?
+- ¿Cuáles son mis próximas actividades?
+- ¿Qué calificaciones tengo?
+
+El asistente debe consultar los datos del sistema.
+
+Crear inicialmente respuestas funcionales mediante JavaScript.
+
+Pero separar la lógica de manera que posteriormente pueda conectarse una API real de IA.
+
+NO colocar ninguna API Key directamente en el frontend.
+
+4. FORO
+
+Crear un foro interno.
+
+Permitir:
+
+- Crear publicaciones
+- Comentar
+- Responder
+- Dar reacciones
+- Reportar contenido
+- Buscar publicaciones
+
+Categorías:
+
+- General
+- Académico
+- Deportes
+- Tecnología
+- Actividades
+- Clubes
+- Ayuda
+
+Mostrar:
+
+- Autor
+- Avatar
+- Fecha
+- Categoría
+- Comentarios
+
+Los administradores deben poder:
+
+- Eliminar publicaciones
+- Ocultar contenido
+- Revisar reportes
+
+Guardar publicaciones y comentarios.
+
+5. SISTEMA DE LOGROS
+
+Crear logros como:
+
+- Primera semana
+- Asistencia perfecta
+- Excelente rendimiento
+- Participación deportiva
+- Participación cultural
+- Participación académica
+- Ayuda a compañeros
+- Participación comunitaria
+
+Mostrar:
+
+- Logros obtenidos
+- Logros bloqueados
+- Progreso
+- Insignias
+
+Cuando se obtenga uno:
+
+- Mostrar notificación
+- Mostrar pequeña animación
+
+Si está activo Reducir movimiento, no mostrar la animación.
+
+6. INCIDENCIAS
+
+Crear sistema para reportar problemas.
+
+Categorías:
+
+- Tecnología
+- Infraestructura
+- Transporte
+- Aula
+- Limpieza
+- Seguridad
+- Convivencia
+- Otro
+
+Formulario:
+
+- Categoría
+- Título
+- Descripción
+- Lugar
+- Fecha
+- Prioridad
+
+Estados:
+
+- Recibida
+- En revisión
+- En proceso
+- Resuelta
+- Cerrada
+
+El estudiante puede ver sus incidencias.
+
+El administrador puede cambiar el estado.
+
+Cuando cambie:
+
+- Actualizar la incidencia
+- Crear notificación para el estudiante
+
+7. LÍNEA DE TIEMPO
+
+Crear una línea de tiempo interactiva.
+
+Mostrar:
+
+- Exámenes
+- Vacaciones
+- Ferias
+- Actividades
+- Eventos deportivos
+- Reuniones
+- Simulacros
+- Matrícula
+- Días especiales
+
+Filtros:
+
+- Hoy
+- Semana
+- Mes
+- Año
+
+Los próximos eventos deben destacarse.
+
+8. MAPA VIRTUAL DEL COLEGIO
+
+Crear un mapa interactivo ilustrado del colegio.
+
+Mostrar:
+
+- Dirección
+- Aulas
+- Biblioteca
+- Laboratorios
+- Gimnasio
+- Cancha
+- Soda
+- Enfermería
+- Baños
+- Parqueo
+- Entradas
+- Salidas
+- Punto de reunión
+
+Al seleccionar un lugar mostrar información.
+
+Agregar buscador:
+
+"¿Dónde está...?"
+
+Utilizar datos ficticios que posteriormente puedan cambiarse por el mapa real.
+
+9. TRANSPORTE
+
+Crear módulo de buses.
+
+Mostrar:
+
+- Número
+- Ruta
+- Conductor
+- Próxima parada
+- Hora estimada
+- Estado
+
+Estados:
+
+- En ruta
+- Próximo
+- Retrasado
+- Finalizado
+
+Crear una simulación de movimiento del bus mediante JavaScript.
+
+No afirmar que existe GPS real.
+
+Preparar una función separada para posteriormente conectarla con una API de ubicación.
+
+10. HORARIOS DE BUSES
+
+Mostrar:
+
+- Número de bus
+- Ruta
+- Salida
+- Paradas
+- Hora estimada por parada
+- Llegada
+- Regreso
+
+Filtros:
+
+- Mañana
+- Tarde
+
+Agregar buscador.
+
+11. SODA / CAFETERÍA
+
+Crear catálogo de productos.
+
+Cada producto debe mostrar:
+
+- Imagen
+- Nombre
+- Precio
+- Categoría
+- Disponibilidad
+
+Categorías:
+
+- Comidas
+- Bebidas
+- Snacks
+- Postres
+- Saludable
+
+Estados:
+
+- Disponible
+- Pocas unidades
+- Agotado
+
+Agregar:
+
+- Buscador
+- Filtros
+- Favoritos
+
+12. CENTRO DE EMERGENCIAS
+
+Crear una sección llamada:
+
+Centro de Emergencias
+
+Mostrar el estado institucional:
+
+- NORMAL
+- PRECAUCIÓN
+- EMERGENCIA
+
+Mostrar información sobre:
+
+- Simulacros
+- Evacuación
+- Terremoto
+- Incendio
+- Emergencias médicas
+- Incidentes críticos de seguridad
+
+Agregar:
+
+- Protocolos oficiales
+- Punto de reunión
+- Avisos de emergencia
+
+Si un administrador cambia el estado a EMERGENCIA:
+
+1. Mostrar una alerta destacada.
+2. Generar notificación.
+3. Mostrarla en Dashboard.
+4. Mostrar únicamente instrucciones institucionales previamente definidas.
+
+No crear instrucciones ofensivas ni mecanismos para enfrentarse físicamente a una amenaza.
+
+13. INTEGRACIÓN
+
+Todo debe compartir información.
+
+Ejemplos:
+
+Una actividad nueva debe aparecer en:
+
+- Línea de tiempo
+- Dashboard
+- Notificaciones
+
+Una emergencia debe aparecer en:
+
+- Centro de Emergencias
+- Dashboard
+- Notificaciones
+
+Una incidencia actualizada debe aparecer en:
+
+- Incidencias
+- Notificaciones
+
+IMPORTANTE
+
+No reconstruyas el proyecto desde cero.
+
+Trabaja sobre el código existente.
+
+No elimines funciones que ya estaban trabajando.
+
+Entrega los archivos completos que necesiten modificaciones y los nuevos archivos necesarios.
+
+Si un archivo no necesita cambios, indícalo.
+
+Todas las funciones deben ser demostrables sin necesidad de backend.

@@ -1,73 +1,31 @@
 # Intranet Escolar
 
-Aplicación unificada de intranet escolar construida con React, TypeScript, Vinext
-y React Router. Incluye autenticación por roles, panel principal, seguimiento
-académico, comunicados y administración de usuarios.
+Prototipo funcional de intranet escolar con autenticación por roles, calificaciones, asistencia, comunicados y gestión básica de usuarios.
 
-## Requisitos
+## Tecnologías del prototipo
+- HTML5
+- CSS3
+- JavaScript
+- localStorage y sessionStorage
+- Font Awesome/CDN para iconos
 
-- Node.js 22.13 o superior.
-- npm 10 o superior.
-- Git.
+## Accesos de prueba
+- Administración: `admin@escuela.test` / `admin123`
+- Docente: `docente@escuela.test` / `docente123`
+- Estudiante/Familia: `familia@escuela.test` / `familia123`
 
-## Instalación
+## Roles
+- `ADMIN`: administración completa del prototipo.
+- `TEACHER`: acceso académico limitado a sus cursos.
+- `STUDENT_FAMILY`: consulta únicamente la información del estudiante relacionado.
 
-Desde la terminal de Visual Studio Code, en la carpeta del proyecto:
+## Claves de almacenamiento
+Se utilizan las claves requeridas por el documento del proyecto:
+`schoolIntranet.v1.users`, `schoolIntranet.v1.credentials`, `schoolIntranet.v1.students`,
+`schoolIntranet.v1.courses`, `schoolIntranet.v1.enrollments`, `schoolIntranet.v1.grades`,
+`schoolIntranet.v1.attendance`, `schoolIntranet.v1.announcements` y `schoolIntranet.v1.session`.
 
-```bash
-npm install
-npm run dev
-```
+## Ejecución
+Abrir `page/index.html` con Live Server o un servidor HTTP local.
 
-Abre la dirección local que muestre Vite. No abras un archivo HTML con Live
-Server: la entrada correcta es la aplicación que inicia `npm run dev`.
-
-## Accesos de demostración
-
-| Perfil | Correo | Contraseña |
-| --- | --- | --- |
-| Administración | `admin@colegiohorizonte.edu.cr` | `Admin2026!` |
-| Docente | `docente@colegiohorizonte.edu.cr` | `Docente2026!` |
-| Estudiante/Familia | `familia@colegiohorizonte.edu.cr` | `Familia2026!` |
-
-Si el navegador conserva datos del prototipo anterior, la aplicación migra las
-cuentas antiguas automáticamente al iniciar.
-
-## Qué ve cada perfil
-
-- `ADMIN`: panel institucional, datos académicos de todos los cursos,
-  comunicados y gestión de usuarios.
-- `TEACHER`: sus cursos y estudiantes, registro de calificaciones y asistencia,
-  además de creación de borradores de comunicados.
-- `STUDENT_FAMILY`: únicamente las calificaciones y la asistencia del estudiante
-  vinculado, más los comunicados publicados para su audiencia.
-
-Solo Administración puede publicar, archivar o eliminar comunicados.
-
-## Estructura principal
-
-```text
-src/
-├── app/                    # Composición y rutas
-├── components/             # Interfaz reutilizable
-├── core/                   # Tipos, seguridad y almacenamiento
-└── features/
-    ├── academics/          # Calificaciones y asistencia
-    ├── announcements/      # Comunicados
-    ├── auth/               # Acceso y panel principal
-    └── users/              # Administración de cuentas
-```
-
-Cada módulo registra sus rutas y su navegación mediante `feature.tsx`; no se
-agregan rutas manualmente al enrutador central.
-
-## Verificación antes de subir a GitHub
-
-```bash
-npm run check
-npm run validate:artifact
-```
-
-Los datos son ficticios y se guardan en el navegador para fines de demostración.
-No utilices información real de estudiantes o familias. Para producción se debe
-usar autenticación y almacenamiento del lado del servidor.
+> Los datos son ficticios y están destinados únicamente al prototipo. No se deben almacenar datos reales de menores.
