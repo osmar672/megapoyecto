@@ -2,9 +2,11 @@
 
 ## Contrato del proyecto
 
-- Mantener los roles `ADMIN`, `TEACHER` y `STUDENT_FAMILY`.
+- Mantener los roles `ADMIN`, `TEACHER`, `STUDENT_FAMILY` y `STAFF`.
 - No cambiar las claves `schoolIntranet.v1.*`.
 - Registrar módulos mediante `src/features/**/feature.tsx`.
+- Registrar proveedores de búsqueda mediante `src/features/**/searchProvider.ts`.
+- Registrar widgets del panel mediante `src/features/**/dashboardWidget.tsx`.
 - No agregar rutas directamente al componente `AppRoutes`.
 - Usar identificadores de tipo `string` y fechas ISO 8601.
 - Mantener nombres internos en inglés y la interfaz en español.

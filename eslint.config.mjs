@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Copias históricas no integradas en la aplicación React actual.
+    "Integrante_3_Comunicados_Dashboard_Documentacion/**",
+    "src/js/**",
   ]),
 ]);
 
