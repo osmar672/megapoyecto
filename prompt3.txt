@@ -1,0 +1,294 @@
+# Análisis del proyecto
+
+El PDF exige un prototipo funcional de intranet escolar y otorga un peso
+importante tanto al código como a la documentación. Los requisitos mínimos son:
+
+- Autenticación con tres perfiles: administración, docente y estudiante/familia.
+- Gestión de usuarios: alta, baja y edición.
+- Módulo académico: calificaciones y/o asistencia.
+- Tablón de comunicados: creación y consulta de avisos.
+- Restricción de información según el rol.
+- Interfaz clara, accesible y cuidadosa con los datos personales.
+- Código versionado en Git con ramas, commits y revisión.
+- Documentación obligatoria en `README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`,
+  `docs/arquitectura.md`, `docs/requerimientos.md` y `AGENTS.md`.
+
+La división propuesta evita que los tres integrantes editen los mismos archivos.
+El integrante 1 crea primero la base compartida y la integra en `main`. Después,
+los integrantes 2 y 3 crean sus ramas desde esa versión actualizada y trabajan
+en paralelo.
+
+## Contrato técnico compartido
+
+Estas decisiones son obligatorias para los tres integrantes:
+
+| Elemento                   | Decisión común                                                                    |
+| -------------------------- | --------------------------------------------------------------------------------- |
+| Stack                      | React, TypeScript y Vite                                                          |
+| Enrutamiento               | React Router                                                                      |
+| Estilos                    | CSS Modules y variables de `src/styles/tokens.css`                                |
+| Persistencia del prototipo | `localStorage`; sesión actual en `sessionStorage`                                 |
+| Pruebas                    | Vitest y React Testing Library                                                    |
+| Idioma de interfaz         | Español                                                                           |
+| Código                     | Nombres en inglés y `camelCase`; componentes en `PascalCase`                      |
+| Roles internos             | `ADMIN`, `TEACHER`, `STUDENT_FAMILY`                                              |
+| Identificadores            | `string`; usar `crypto.randomUUID()` para registros nuevos                        |
+| Fechas                     | Cadenas ISO 8601                                                                  |
+| Datos                      | Solo información ficticia; nunca datos reales de menores                          |
+| Integración                | Pull requests; no hacer push directo ni force push a `main`                       |
+| Calidad                    | Deben aprobar `npm run lint`, `npm run test`, `npm run build` y `npm run lint:md` |
+
+Claves de almacenamiento obligatorias:
+
+- `schoolIntranet.v1.users`
+- `schoolIntranet.v1.credentials`
+- `schoolIntranet.v1.students`
+- `schoolIntranet.v1.courses`
+- `schoolIntranet.v1.enrollments`
+- `schoolIntranet.v1.grades`
+- `schoolIntranet.v1.attendance`
+- `schoolIntranet.v1.announcements`
+- `schoolIntranet.v1.session`
+
+Rutas obligatorias:
+
+- `/login`
+- `/dashboard`
+- `/users`
+- `/academics/grades`
+- `/academics/attendance`
+- `/announcements`
+- `/403`
+- `*` para página no encontrada
+
+Modelos compartidos que deben existir en `src/core/types/domain.ts` desde la
+base:
+
+- `UserRole = 'ADMIN' | 'TEACHER' | 'STUDENT_FAMILY'`
+- `User`: `id`, `firstName`, `lastName`, `email`, `role`, `isActive`,
+  `relatedStudentId?`, `createdAt`, `updatedAt`.
+- `Credential`: `userId`, `passwordSalt`, `passwordHash`.
+- `AuthSession`: `userId`, `role`, `issuedAt`, `expiresAt`.
+- `Student`: `id`, `institutionalCode`, `firstName`, `lastName`, `gradeLevel`,
+  `section`, `isActive`.
+- `Course`: `id`, `code`, `name`, `teacherUserId`, `gradeLevel`, `section`,
+  `isActive`.
+- `Enrollment`: `id`, `studentId`, `courseId`, `academicYear`, `status`.
+- `Grade`: `id`, `studentId`, `courseId`, `period`, `score`, `maxScore`,
+  `comment?`, `recordedBy`, `createdAt`, `updatedAt`.
+- `AttendanceRecord`: `id`, `studentId`, `courseId`, `date`, `status`, `notes?`,
+  `recordedBy`, `createdAt`, `updatedAt`.
+- `Announcement`: `id`, `title`, `body`, `audience`, `status`, `authorUserId`,
+  `publishedAt?`, `createdAt`, `updatedAt`.
+
+Los módulos deben registrarse sin modificar un enrutador central. Cada área crea
+un archivo `feature.tsx` que exporta un `FeatureModule`. La base detecta
+automáticamente `src/features/**/feature.tsx` mediante `import.meta.glob`.
+`FeatureModule` contiene `id`, `routes` y `navigation`; cada ruta incluye
+`path`, `component` y `allowedRoles`.
+
+## Orden de trabajo e integración
+
+1. El integrante 1 termina `feature/foundation-auth-users`, abre un pull request
+   y se integra después de aprobar todas las verificaciones.
+2. Los integrantes 2 y 3 actualizan `main` y crean sus ramas desde ese mismo
+   commit.
+3. Ambos trabajan en paralelo sin modificar archivos compartidos.
+4. Se integra primero `feature/academic-module` y después
+   `feature/communications-docs`.
+5. El integrante 1 crea `integration/final-validation`, actualiza documentación
+   si hace falta y ejecuta la validación completa.
+6. Solo se integra a `main` cuando no hay errores de TypeScript, pruebas, lint
+   ni compilación.
+# Prompt 3 - Integrante responsable de comunicados, panel y documentación
+
+Actúa como ingeniero de software senior y responsable de documentación técnica.
+Construirás el módulo de comunicados, el panel principal y la documentación
+obligatoria de una intranet escolar. Trabajarás en la rama
+`feature/communications-docs`, creada desde `main` después de integrar la base
+`feature/foundation-auth-users`. Debes entregar código funcional y documentación
+completa, no solo un plan.
+
+### Verificación previa de comunicados y documentación
+
+Antes de programar:
+
+1. Ejecuta `git status`, actualiza `main` con `git pull --ff-only` y crea tu
+   rama desde ese commit.
+2. Lee `AGENTS.md`, los tipos compartidos, el servicio de almacenamiento, el
+   registro de módulos, los tokens visuales y los módulos ya existentes.
+3. No redefinas roles, tipos, claves de almacenamiento ni rutas.
+4. Si el módulo académico ya fue integrado cuando hagas la revisión final,
+   enlázalo en la documentación; si todavía no está, usa el contrato compartido
+   y deja la redacción preparada sin inventar resultados de pruebas.
+
+### Alcance exclusivo de comunicados y documentación
+
+Puedes crear o modificar:
+
+- `src/features/announcements/**`
+- `src/features/dashboard/**`
+- `README.md`
+- `CONTRIBUTING.md`
+- `CHANGELOG.md`
+- `AGENTS.md`
+- `docs/arquitectura.md`
+- `docs/requerimientos.md`
+- `docs/assets/**`
+- `docs/modules/communications.md`
+
+No modifiques `package.json`, `src/app/**`, `src/core/**`, autenticación,
+usuarios, módulo académico ni estilos globales. No agregues dependencias.
+Utiliza CSS Modules locales y los tokens existentes.
+
+### Reglas generales de comunicados y documentación
+
+- No uses emojis en la interfaz, código, documentación, commits ni respuesta.
+- Mantén apariencia institucional, empresarial y sobria.
+- Usa nombres internos en inglés y contenido visible en español.
+- No uses `any`, `@ts-ignore`, datos reales ni información personal innecesaria.
+- Usa los tipos y servicios compartidos; no copies modelos ni accedas a claves
+  alternativas.
+- Usa identificadores con `crypto.randomUUID()` y fechas ISO 8601.
+- No edites un archivo propiedad de otro integrante para resolver un problema
+  local.
+- No dejes enlaces rotos, secciones vacías, texto de plantilla, `TODO` o
+  afirmaciones que no puedan comprobarse.
+
+### Tablón de comunicados
+
+Implementa `/announcements` con estas reglas:
+
+- `ADMIN`: puede crear, editar, publicar y consultar cualquier comunicado.
+- `TEACHER`: puede crear comunicados, editar sus propios borradores y consultar
+  los comunicados publicados dirigidos a su rol. No puede editar comunicados de
+  otros autores.
+- `STUDENT_FAMILY`: solo puede consultar comunicados publicados dirigidos a
+  `ALL` o `STUDENT_FAMILY`.
+- Estados exactos: `DRAFT` y `PUBLISHED`.
+- Audiencias permitidas: `ALL`, `ADMIN`, `TEACHER` y `STUDENT_FAMILY`.
+- Valida título, cuerpo, audiencia y permisos antes de guardar.
+- No muestres borradores a personas no autorizadas.
+- Conserva `createdAt`, actualiza `updatedAt` y establece `publishedAt` al
+  publicar.
+- Incluye búsqueda, filtro por estado y audiencia cuando el rol lo permita.
+- Utiliza confirmación antes de eliminar o retirar una publicación.
+- Incluye estados de carga, vacío, éxito y error accesibles.
+
+Separa páginas, componentes, servicio o repositorio, validadores y funciones de
+autorización. Crea `src/features/announcements/feature.tsx` para registrar
+`/announcements`, navegación `Comunicados` y acceso a los tres roles. No edites
+el enrutador ni la navegación central.
+
+### Panel principal
+
+Implementa `/dashboard` en `src/features/dashboard/**` y regístralo mediante su
+propio `feature.tsx`.
+
+El contenido debe adaptarse al rol:
+
+- `ADMIN`: total de usuarios activos, distribución por rol, cantidad de cursos y
+  comunicados publicados.
+- `TEACHER`: cursos asignados, estudiantes matriculados en sus cursos y
+  comunicados relevantes.
+- `STUDENT_FAMILY`: resumen de calificaciones disponibles, asistencia y
+  comunicados relevantes del estudiante relacionado.
+
+No importes servicios internos de otros módulos. Consume el almacenamiento
+compartido y los tipos públicos para calcular métricas mediante funciones puras.
+Si todavía no hay datos, muestra un estado vacío útil. Las tarjetas deben ser
+accesibles, responsive y no revelar información de otros estudiantes.
+
+### Documentación obligatoria
+
+La documentación representa el 45 por ciento de la evaluación entre Markdown y
+memoria del agente. Debe ser exacta, profesional y coherente con el repositorio
+real.
+
+1. `README.md`: presentación, características, roles, requisitos previos,
+   instalación paso a paso, comandos, credenciales ficticias de demostración,
+   ejemplo de uso, estructura, seguridad del prototipo, pruebas, colaboración y
+   licencia.
+2. `CONTRIBUTING.md`: flujo de ramas, nombres de ramas, commits convencionales,
+   pull requests, revisión, resolución de conflictos, definición de terminado y
+   prohibición de push directo a `main`.
+3. `CHANGELOG.md`: formato basado en Keep a Changelog, sección `Unreleased` y
+   cambios reales de la versión inicial.
+4. `docs/arquitectura.md`: stack, estructura, registro automático de módulos,
+   flujo de autenticación, autorización, persistencia, decisiones y
+   limitaciones. Incluye un diagrama Mermaid útil.
+5. `docs/requerimientos.md`: requisitos funcionales y no funcionales como listas
+   de tareas verificables y una matriz que relacione requisito, módulo, rol y
+   prueba.
+6. `AGENTS.md`: exactamente las siete áreas solicitadas por el PDF: Contexto,
+   Requerimientos, Reglas, Restricciones, Objetivos, Memoria del proyecto y
+   Buenas prácticas.
+7. `docs/modules/communications.md`: funcionamiento, permisos, validaciones y
+   pruebas del módulo.
+8. `docs/assets/**`: incluye al menos una imagen o SVG relevante y enlázala con
+   texto alternativo descriptivo desde la documentación.
+
+Demuestra correctamente GitHub Flavored Markdown: un único H1 por archivo,
+jerarquía de encabezados, negrita, cursiva, listas ordenadas, listas no
+ordenadas, listas de tareas, enlaces, imagen con texto alternativo, bloques de
+código con lenguaje, tablas, citas y separadores. Mantén líneas en blanco entre
+bloques y legibilidad en crudo.
+
+No inventes que una función o prueba existe: revisa el código antes de marcar un
+requisito como completado. Si falta algo, mantenlo como tarea pendiente y
+explícalo con precisión.
+
+### Pruebas y aceptación de comunicados y panel
+
+Agrega pruebas para:
+
+- Visibilidad de comunicados por audiencia y rol.
+- Exclusión de borradores para `STUDENT_FAMILY`.
+- Docente bloqueado al editar una publicación ajena.
+- Publicación con `publishedAt` y conservación de `createdAt`.
+- Métricas correctas del panel para cada rol.
+- Panel sin fuga de datos entre estudiantes.
+- Estados vacíos sin errores.
+
+Ejecuta `npm run lint`, `npm run test`, `npm run build` y `npm run lint:md`.
+Revisa también enlaces y rutas mencionadas en Markdown. Corrige todo error
+atribuible a tu trabajo y no declares resultados no ejecutados.
+
+### Git y entrega de comunicados y documentación
+
+Usa commits pequeños, por ejemplo:
+
+- `feat: implement audience based announcements`
+- `feat: add role specific dashboard`
+- `test: cover communication permissions`
+- `docs: add complete project documentation`
+
+No hagas push directo ni force push a `main`. Al finalizar, entrega un resumen
+profesional, archivos modificados, resultados de verificación y descripción
+lista para el pull request. Indica cualquier requisito que dependa de que el
+módulo académico sea integrado antes de actualizar la matriz final.
+
+---
+
+## Lista final de integración
+
+Antes de aprobar el último pull request, el responsable de integración debe
+comprobar:
+
+- Las tres ramas nacieron del punto correcto y los archivos modificados respetan
+  la propiedad asignada.
+- No existen modelos, roles, claves de almacenamiento o rutas duplicadas.
+- `npm ci` termina correctamente desde un clon limpio.
+- `npm run lint` no reporta errores.
+- `npm run test` aprueba todas las pruebas.
+- `npm run build` compila TypeScript y Vite sin errores.
+- `npm run lint:md` valida todos los archivos Markdown.
+- Se puede iniciar sesión con los tres roles.
+- Cada rol ve únicamente sus rutas, acciones y datos permitidos.
+- Usuarios, calificaciones, asistencia y comunicados conservan datos al
+  recargar.
+- La navegación funciona con teclado y el foco es visible.
+- No hay contraseñas en texto plano, secretos, datos reales, emojis, `TODO`,
+  rutas rotas ni archivos generados en Git.
+- Los documentos obligatorios existen y describen la implementación real.
+- El historial de commits evidencia el trabajo de los tres integrantes.

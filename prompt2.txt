@@ -1,0 +1,256 @@
+# Análisis del proyecto
+
+El PDF exige un prototipo funcional de intranet escolar y otorga un peso
+importante tanto al código como a la documentación. Los requisitos mínimos son:
+
+- Autenticación con tres perfiles: administración, docente y estudiante/familia.
+- Gestión de usuarios: alta, baja y edición.
+- Módulo académico: calificaciones y/o asistencia.
+- Tablón de comunicados: creación y consulta de avisos.
+- Restricción de información según el rol.
+- Interfaz clara, accesible y cuidadosa con los datos personales.
+- Código versionado en Git con ramas, commits y revisión.
+- Documentación obligatoria en `README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`,
+  `docs/arquitectura.md`, `docs/requerimientos.md` y `AGENTS.md`.
+
+La división propuesta evita que los tres integrantes editen los mismos archivos.
+El integrante 1 crea primero la base compartida y la integra en `main`. Después,
+los integrantes 2 y 3 crean sus ramas desde esa versión actualizada y trabajan
+en paralelo.
+
+## Contrato técnico compartido
+
+Estas decisiones son obligatorias para los tres integrantes:
+
+| Elemento                   | Decisión común                                                                    |
+| -------------------------- | --------------------------------------------------------------------------------- |
+| Stack                      | React, TypeScript y Vite                                                          |
+| Enrutamiento               | React Router                                                                      |
+| Estilos                    | CSS Modules y variables de `src/styles/tokens.css`                                |
+| Persistencia del prototipo | `localStorage`; sesión actual en `sessionStorage`                                 |
+| Pruebas                    | Vitest y React Testing Library                                                    |
+| Idioma de interfaz         | Español                                                                           |
+| Código                     | Nombres en inglés y `camelCase`; componentes en `PascalCase`                      |
+| Roles internos             | `ADMIN`, `TEACHER`, `STUDENT_FAMILY`                                              |
+| Identificadores            | `string`; usar `crypto.randomUUID()` para registros nuevos                        |
+| Fechas                     | Cadenas ISO 8601                                                                  |
+| Datos                      | Solo información ficticia; nunca datos reales de menores                          |
+| Integración                | Pull requests; no hacer push directo ni force push a `main`                       |
+| Calidad                    | Deben aprobar `npm run lint`, `npm run test`, `npm run build` y `npm run lint:md` |
+
+Claves de almacenamiento obligatorias:
+
+- `schoolIntranet.v1.users`
+- `schoolIntranet.v1.credentials`
+- `schoolIntranet.v1.students`
+- `schoolIntranet.v1.courses`
+- `schoolIntranet.v1.enrollments`
+- `schoolIntranet.v1.grades`
+- `schoolIntranet.v1.attendance`
+- `schoolIntranet.v1.announcements`
+- `schoolIntranet.v1.session`
+
+Rutas obligatorias:
+
+- `/login`
+- `/dashboard`
+- `/users`
+- `/academics/grades`
+- `/academics/attendance`
+- `/announcements`
+- `/403`
+- `*` para página no encontrada
+
+Modelos compartidos que deben existir en `src/core/types/domain.ts` desde la
+base:
+
+- `UserRole = 'ADMIN' | 'TEACHER' | 'STUDENT_FAMILY'`
+- `User`: `id`, `firstName`, `lastName`, `email`, `role`, `isActive`,
+  `relatedStudentId?`, `createdAt`, `updatedAt`.
+- `Credential`: `userId`, `passwordSalt`, `passwordHash`.
+- `AuthSession`: `userId`, `role`, `issuedAt`, `expiresAt`.
+- `Student`: `id`, `institutionalCode`, `firstName`, `lastName`, `gradeLevel`,
+  `section`, `isActive`.
+- `Course`: `id`, `code`, `name`, `teacherUserId`, `gradeLevel`, `section`,
+  `isActive`.
+- `Enrollment`: `id`, `studentId`, `courseId`, `academicYear`, `status`.
+- `Grade`: `id`, `studentId`, `courseId`, `period`, `score`, `maxScore`,
+  `comment?`, `recordedBy`, `createdAt`, `updatedAt`.
+- `AttendanceRecord`: `id`, `studentId`, `courseId`, `date`, `status`, `notes?`,
+  `recordedBy`, `createdAt`, `updatedAt`.
+- `Announcement`: `id`, `title`, `body`, `audience`, `status`, `authorUserId`,
+  `publishedAt?`, `createdAt`, `updatedAt`.
+
+Los módulos deben registrarse sin modificar un enrutador central. Cada área crea
+un archivo `feature.tsx` que exporta un `FeatureModule`. La base detecta
+automáticamente `src/features/**/feature.tsx` mediante `import.meta.glob`.
+`FeatureModule` contiene `id`, `routes` y `navigation`; cada ruta incluye
+`path`, `component` y `allowedRoles`.
+
+## Orden de trabajo e integración
+
+1. El integrante 1 termina `feature/foundation-auth-users`, abre un pull request
+   y se integra después de aprobar todas las verificaciones.
+2. Los integrantes 2 y 3 actualizan `main` y crean sus ramas desde ese mismo
+   commit.
+3. Ambos trabajan en paralelo sin modificar archivos compartidos.
+4. Se integra primero `feature/academic-module` y después
+   `feature/communications-docs`.
+5. El integrante 1 crea `integration/final-validation`, actualiza documentación
+   si hace falta y ejecuta la validación completa.
+6. Solo se integra a `main` cuando no hay errores de TypeScript, pruebas, lint
+   ni compilación.
+## Prompt 2 - Integrante responsable del módulo académico
+
+Actúa como ingeniero de software senior responsable del módulo académico de una
+intranet escolar. Trabajarás exclusivamente en la rama
+`feature/academic-module`, creada desde `main` después de integrar la base
+`feature/foundation-auth-users`. Debes implementar código real, funcional y
+probado; no entregues solo una propuesta.
+
+### Verificación previa del módulo académico
+
+Antes de programar:
+
+1. Ejecuta `git status`, confirma que no hay cambios ajenos sin guardar y
+   actualiza `main` con `git pull --ff-only`.
+2. Crea la rama desde la versión actualizada de `main`.
+3. Lee `AGENTS.md`, `src/core/types/domain.ts`, `src/core/types/feature.ts`,
+   `src/core/storage/storageKeys.ts`, el servicio de almacenamiento y un módulo
+   existente como referencia.
+4. Confirma que existen los roles `ADMIN`, `TEACHER` y `STUDENT_FAMILY` y no los
+   redefinas.
+
+### Alcance exclusivo del módulo académico
+
+Solo puedes crear o modificar:
+
+- `src/features/academics/**`
+- `docs/modules/academics.md`
+- Pruebas del módulo académico dentro de esa misma carpeta o siguiendo el patrón
+  de pruebas ya establecido
+
+No modifiques `package.json`, `src/app/**`, `src/core/**`, `src/styles/**`,
+autenticación, usuarios, comunicados ni los documentos generales. Si detectas
+que falta algo en el contrato compartido, detente y documenta la solicitud; no
+crees tipos duplicados ni cambies archivos de otro integrante.
+
+### Reglas de compatibilidad
+
+- Importa `UserRole`, `Student`, `Course`, `Enrollment`, `Grade` y
+  `AttendanceRecord` desde `src/core/types/domain.ts`.
+- Usa el servicio de almacenamiento de la base y las claves existentes. No
+  escribas directamente nombres alternativos en `localStorage`.
+- Usa `crypto.randomUUID()` para nuevos identificadores y fechas ISO 8601.
+- Usa nombres internos en inglés y texto visible en español.
+- No uses `any`, `@ts-ignore`, datos reales, contraseñas ni información sensible
+  innecesaria.
+- No uses emojis en la interfaz, código, documentación, commits ni respuesta.
+- No agregues dependencias.
+- Usa CSS Modules locales y las variables de `src/styles/tokens.css`; no edites
+  estilos globales.
+
+### Funcionalidad de calificaciones
+
+Implementa `/academics/grades` con estas reglas:
+
+- `ADMIN`: puede consultar y registrar o editar calificaciones de cualquier
+  curso.
+- `TEACHER`: solo puede consultar y registrar o editar calificaciones de cursos
+  cuyo `teacherUserId` coincida con el usuario autenticado.
+- `STUDENT_FAMILY`: solo puede consultar calificaciones del estudiante indicado
+  por `relatedStudentId`; no debe ver formularios de edición ni identificadores
+  internos innecesarios.
+- Permite filtrar por curso, estudiante y período cuando el rol lo autoriza.
+- Usa los períodos `P1`, `P2` y `P3`.
+- Valida que `score` sea numérico, no negativo y no mayor que `maxScore`.
+- Impide calificar a un estudiante que no esté matriculado en el curso.
+- Calcula promedios mediante funciones puras y muestra estados vacíos claros.
+- Registra `recordedBy`, `createdAt` y `updatedAt` sin sobrescribir `createdAt`
+  durante una edición.
+
+### Funcionalidad de asistencia
+
+Implementa `/academics/attendance` con estas reglas:
+
+- Estados exactos: `PRESENT`, `ABSENT`, `LATE`, `EXCUSED`.
+- `ADMIN` puede administrar todos los registros.
+- `TEACHER` solo puede registrar o modificar asistencia en sus cursos.
+- `STUDENT_FAMILY` solo puede consultar la asistencia de su estudiante
+  relacionado.
+- Evita registros duplicados para la misma combinación de estudiante, curso y
+  fecha; una segunda operación debe editar el registro existente de forma
+  explícita.
+- Valida matrícula, curso, fecha y permisos antes de persistir.
+- Muestra un resumen con total de lecciones, presentes, ausentes, tardías y
+  justificadas.
+- No expongas notas internas a roles no autorizados.
+
+### Arquitectura del módulo
+
+Separa como mínimo:
+
+- Páginas de calificaciones y asistencia.
+- Componentes de formularios, tablas, filtros y resúmenes.
+- `academicService` o repositorios del módulo.
+- Validadores y funciones de cálculo puras.
+- Datos iniciales idempotentes del módulo, únicamente si todavía no existen.
+- Pruebas unitarias y de permisos.
+
+Crea `src/features/academics/feature.tsx` y exporta un `FeatureModule`
+compatible con el registro automático de la base. Registra:
+
+- `/academics/grades` con navegación `Calificaciones`.
+- `/academics/attendance` con navegación `Asistencia`.
+- Ambas rutas disponibles para `ADMIN`, `TEACHER` y `STUDENT_FAMILY`, dejando
+  que la página aplique las capacidades de lectura o edición correspondientes.
+
+No edites manualmente el enrutador, el layout ni la navegación central.
+
+### Datos de prueba compatibles
+
+Respeta estos identificadores ya definidos por la base:
+
+- Docente: `usr_teacher_001`.
+- Usuario estudiante/familia: `usr_family_001`.
+- Estudiante relacionado: `stu_001`.
+
+Si inicializas cursos o matrículas, usa datos ficticios consistentes y no
+reemplaces arreglos existentes. La inicialización debe ser idempotente y
+conservar lo que ya haya sido creado desde la interfaz.
+
+### Pruebas y aceptación del módulo académico
+
+Incluye pruebas para:
+
+- Docente que solo visualiza sus cursos.
+- Docente bloqueado al intentar modificar un curso ajeno.
+- Familiar que solo visualiza `stu_001`.
+- Familiar sin controles de edición.
+- Validación de una calificación fuera de rango.
+- Rechazo de calificación sin matrícula.
+- Prevención de asistencia duplicada.
+- Cálculo correcto de promedio y resumen de asistencia.
+- Persistencia y edición sin pérdida de `createdAt`.
+
+Ejecuta `npm run lint`, `npm run test`, `npm run build` y `npm run lint:md`.
+Corrige cualquier problema causado por tu módulo y confirma que no modificaste
+archivos fuera de tu alcance.
+
+### Documentación y Git
+
+En `docs/modules/academics.md`, documenta propósito, permisos por rol, modelos
+usados, decisiones, validaciones, flujo de uso y pruebas. Usa Markdown legible
+en crudo y no edites los documentos generales.
+
+Usa commits pequeños, por ejemplo:
+
+- `feat: add role aware grade management`
+- `feat: implement attendance tracking`
+- `test: cover academic permissions and validation`
+- `docs: document academic module`
+
+No hagas push directo ni force push a `main`. Al finalizar, entrega un resumen
+profesional, lista de archivos modificados, resultados reales de los comandos,
+riesgos conocidos y una descripción lista para el pull request. No dejes `TODO`,
+botones sin función ni errores de compilación.

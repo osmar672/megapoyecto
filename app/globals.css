@@ -1,0 +1,41 @@
+@import "../src/styles/tokens.css";
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-canvas);
+}
+
+body {
+  margin: 0;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  outline: none;
+}
+
+:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+::selection {
+  background: var(--color-brand-soft);
+  color: var(--color-brand-deep);
+}

@@ -1,0 +1,46 @@
+.button {
+  min-height: 2.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 1rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+
+.button:hover:not(:disabled) { transform: translateY(-1px); }
+.button:disabled { opacity: 0.55; cursor: not-allowed; }
+.primary { color: white; background: var(--color-brand); }
+.primary:hover:not(:disabled) { background: var(--color-brand-hover); }
+.secondary { color: var(--color-brand-deep); background: white; border-color: var(--color-line); }
+.secondary:hover:not(:disabled) { border-color: var(--color-brand); background: var(--color-brand-soft); }
+.danger { color: var(--color-danger); background: var(--color-danger-soft); border-color: #efcaca; }
+.danger:hover:not(:disabled) { border-color: var(--color-danger); }
+.quiet { color: var(--color-ink-soft); background: transparent; }
+.quiet:hover:not(:disabled) { background: rgba(255, 255, 255, 0.1); color: white; }
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.field label { font-size: 0.875rem; font-weight: 650; color: var(--color-ink); }
+.field input,
+.field select {
+  width: 100%;
+  min-height: 2.8rem;
+  border: 1px solid #c9d5de;
+  border-radius: var(--radius-sm);
+  background: white;
+  color: var(--color-ink);
+  padding: 0.7rem 0.8rem;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.field input:hover,
+.field select:hover { border-color: #8da3b3; }
+.field input:focus,
+.field select:focus { border-color: var(--color-brand); box-shadow: 0 0 0 3px var(--color-focus-ring); }
+.field input[aria-invalid="true"],
+.field select[aria-invalid="true"] { border-color: var(--color-danger); }
+.hint { color: var(--color-muted); font-size: 0.78rem; }
+.error { color: var(--color-danger); font-size: 0.78rem; font-weight: 600; }

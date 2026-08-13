@@ -1,0 +1,19 @@
+.loading {
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--space-4);
+  color: var(--color-brand-deep);
+  font-weight: 650;
+}
+.mark {
+  width: 3.5rem;
+  height: 3.5rem;
+  display: grid;
+  place-items: center;
+  border-radius: 1rem;
+  background: var(--color-brand-deep);
+  color: white;
+  letter-spacing: -0.04em;
+}

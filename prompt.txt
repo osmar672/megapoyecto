@@ -1,0 +1,536 @@
+# Sistema Bancario — Frontend JavaScript Puro
+
+Desarrolla un proyecto Frontend educativo que simule un pequeño sistema bancario.
+
+El proyecto debe ser **simple, funcional y fácil de entender**. No sobrearquitectures la solución.
+
+## Tecnologías obligatorias
+
+Utiliza únicamente:
+
+* HTML5
+* CSS3
+* JavaScript puro
+* Node.js
+* npm
+* ES Modules
+* LocalStorage
+
+NO utilizar:
+
+* React
+* Vue
+* Angular
+* TypeScript
+* Express
+* Base de datos
+* Backend
+* Firebase
+* APIs externas
+
+Node.js y npm se utilizarán únicamente para administrar el proyecto y ejecutar el entorno de desarrollo.
+
+---
+
+# 1. Estructura
+
+Crear una estructura sencilla:
+
+```text
+sistema-bancario/
+│
+├── package.json
+├── index.html
+│
+├── css/
+│   └── style.css
+│
+├── js/
+│   ├── main.js
+│   ├── data.js
+│   ├── auth.js
+│   ├── clientes.js
+│   └── storage.js
+│
+└── assets/
+```
+
+Utilizar `import` y `export` para trabajar con módulos.
+
+---
+
+# 2. Autenticación
+
+Crear una pantalla de Login.
+
+Campos:
+
+* Usuario
+* Contraseña
+
+Crear un usuario administrador ficticio:
+
+```text
+Usuario: admin
+Contraseña: 1234
+```
+
+Cuando las credenciales sean correctas:
+
+```text
+Login
+   ↓
+Dashboard
+```
+
+Si son incorrectas mostrar:
+
+```text
+Usuario o contraseña incorrectos
+```
+
+Guardar la sesión utilizando:
+
+```javascript
+localStorage
+```
+
+Por ejemplo:
+
+```text
+bank_session
+```
+
+Si existe una sesión activa, el usuario debe ingresar directamente al Dashboard.
+
+Agregar botón:
+
+```text
+Cerrar sesión
+```
+
+Al cerrar sesión:
+
+* Eliminar la sesión.
+* Regresar al Login.
+
+---
+
+# 3. Dashboard
+
+Crear un Dashboard sencillo y moderno.
+
+Debe contener:
+
+```text
+┌─────────────────────────────────────────┐
+│ SISTEMA BANCARIO          Admin  Logout │
+├─────────────────────────────────────────┤
+│                                         │
+│       Dashboard                         │
+│                                         │
+│  Clientes registrados                   │
+│          25                             │
+│                                         │
+│  ┌───────────────────────────────────┐  │
+│  │       Gestión de Clientes         │  │
+│  │                                   │  │
+│  │  + Nuevo Cliente                  │  │
+│  │                                   │  │
+│  │  Tabla de clientes                │  │
+│  └───────────────────────────────────┘  │
+│                                         │
+└─────────────────────────────────────────┘
+```
+
+Mostrar una tarjeta con:
+
+```text
+Total de clientes
+```
+
+El número debe calcularse dinámicamente a partir de los clientes almacenados.
+
+---
+
+# 4. CRUD de clientes
+
+El sistema tendrá **un único CRUD: Clientes**.
+
+Crear un formulario para:
+
+### Crear cliente
+
+Campos:
+
+```text
+Nombre
+Apellido
+Identificación
+Correo
+Teléfono
+Tipo de cuenta
+Saldo inicial
+```
+
+Tipos de cuenta:
+
+```text
+Ahorros
+Corriente
+```
+
+---
+
+# 5. Tabla de clientes
+
+Mostrar los clientes en una tabla:
+
+| ID | Nombre | Identificación | Correo | Tipo de cuenta | Saldo | Acciones |
+| -- | ------ | -------------- | ------ | -------------- | ----- | -------- |
+
+Cada registro debe tener:
+
+```text
+Editar
+Eliminar
+```
+
+---
+
+# 6. Crear cliente
+
+Al presionar:
+
+```text
++ Nuevo Cliente
+```
+
+mostrar un formulario o modal.
+
+Al guardar:
+
+1. Validar los campos.
+2. Crear el cliente.
+3. Guardarlo en LocalStorage.
+4. Actualizar la tabla.
+5. Actualizar el total de clientes.
+6. Limpiar el formulario.
+7. Mostrar mensaje de éxito.
+
+---
+
+# 7. Editar cliente
+
+Al presionar:
+
+```text
+Editar
+```
+
+cargar los datos del cliente en el formulario.
+
+Permitir modificar:
+
+* Nombre
+* Apellido
+* Identificación
+* Correo
+* Teléfono
+* Tipo de cuenta
+* Saldo
+
+Al guardar:
+
+1. Actualizar el registro.
+2. Guardarlo en LocalStorage.
+3. Actualizar la tabla.
+
+---
+
+# 8. Eliminar cliente
+
+Al presionar:
+
+```text
+Eliminar
+```
+
+mostrar una confirmación:
+
+```text
+¿Está seguro de eliminar este cliente?
+```
+
+Si confirma:
+
+* Eliminar el cliente.
+* Actualizar LocalStorage.
+* Actualizar tabla.
+* Actualizar contador.
+
+---
+
+# 9. LocalStorage
+
+No utilizar ninguna base de datos.
+
+Utilizar:
+
+```javascript
+localStorage
+```
+
+para guardar los clientes.
+
+Crear un módulo:
+
+```text
+js/storage.js
+```
+
+con funciones:
+
+```javascript
+saveClients()
+getClients()
+deleteClients()
+```
+
+Los datos deben mantenerse aunque el navegador se recargue.
+
+---
+
+# 10. Datos iniciales
+
+Si no existen clientes en LocalStorage, cargar automáticamente algunos clientes ficticios.
+
+Ejemplo:
+
+```javascript
+[
+    {
+        id: 1,
+        nombre: "Carlos",
+        apellido: "Ramírez",
+        identificacion: "101010101",
+        correo: "carlos@example.com",
+        telefono: "8888-1111",
+        tipoCuenta: "Ahorros",
+        saldo: 500000
+    },
+    {
+        id: 2,
+        nombre: "María",
+        apellido: "Gómez",
+        identificacion: "202020202",
+        correo: "maria@example.com",
+        telefono: "8888-2222",
+        tipoCuenta: "Corriente",
+        saldo: 750000
+    }
+]
+```
+
+Los datos son únicamente ficticios.
+
+---
+
+# 11. Validaciones
+
+Implementar validaciones básicas:
+
+* Ningún campo obligatorio puede estar vacío.
+* El correo debe tener formato válido.
+* El saldo debe ser numérico.
+* El saldo no puede ser negativo.
+* La identificación no puede repetirse.
+* El correo no puede repetirse.
+
+Mostrar los errores directamente en el formulario.
+
+---
+
+# 12. Diseño
+
+Crear una interfaz:
+
+* Moderna
+* Limpia
+* Profesional
+* Responsive
+* Inspirada en un dashboard bancario
+
+Utilizar:
+
+* Sidebar o menú sencillo
+* Navbar
+* Cards
+* Tabla
+* Modal
+* Botones
+* Alertas
+
+No es necesario utilizar ninguna librería CSS.
+
+Todo el diseño puede realizarse con CSS puro.
+
+---
+
+# 13. JavaScript
+
+Utilizar JavaScript moderno:
+
+```javascript
+const
+let
+arrow functions
+map()
+filter()
+find()
+findIndex()
+forEach()
+template literals
+destructuring
+modules
+```
+
+Utilizar eventos:
+
+```javascript
+addEventListener()
+```
+
+Manipular el DOM mediante:
+
+```javascript
+querySelector()
+createElement()
+innerHTML
+classList
+```
+
+Separar responsabilidades entre los archivos:
+
+```text
+auth.js       → Login y sesión
+
+clientes.js   → CRUD de clientes
+
+storage.js    → LocalStorage
+
+data.js       → Datos iniciales
+
+main.js       → Inicio de la aplicación
+```
+
+---
+
+# 14. Flujo de la aplicación
+
+La aplicación debe funcionar así:
+
+```text
+                ┌─────────────┐
+                │    LOGIN    │
+                └──────┬──────┘
+                       │
+                usuario válido
+                       │
+                       ▼
+              ┌─────────────────┐
+              │    DASHBOARD    │
+              └────────┬────────┘
+                       │
+                       ▼
+              ┌─────────────────┐
+              │    CLIENTES     │
+              └────────┬────────┘
+                       │
+          ┌────────────┼────────────┐
+          ▼            ▼            ▼
+       CREAR         EDITAR       ELIMINAR
+```
+
+---
+
+# 15. package.json
+
+Configurar el proyecto para utilizar ES Modules:
+
+```json
+{
+  "name": "sistema-bancario",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "..."
+  }
+}
+```
+
+Utilizar una herramienta sencilla como servidor de desarrollo únicamente si es necesaria.
+
+No crear ningún backend.
+
+---
+
+# 16. README
+
+Crear un README sencillo que explique:
+
+* Descripción del proyecto.
+* Tecnologías.
+* Instalación.
+* Cómo ejecutar.
+* Usuario y contraseña de prueba.
+* Estructura de carpetas.
+* Funcionamiento del CRUD.
+* Uso de LocalStorage.
+
+---
+
+# REGLA PRINCIPAL
+
+Este proyecto debe ser **SENCILLO**.
+
+No agregar:
+
+* Módulos bancarios adicionales.
+* Transferencias.
+* Retiros.
+* Depósitos.
+* Auditoría.
+* Roles complejos.
+* Backend.
+* Base de datos.
+* APIs.
+* React.
+* TypeScript.
+
+El objetivo es únicamente:
+
+```text
+AUTENTICACIÓN
+       ↓
+DASHBOARD
+       ↓
+CRUD DE CLIENTES
+       ↓
+LOCALSTORAGE
+```
+
+Antes de escribir código, analiza brevemente la estructura y después implementa el proyecto completo.
+
+Al finalizar, verifica que:
+
+* El Login funcione.
+* La sesión persista.
+* El Dashboard cargue.
+* El CRUD funcione.
+* Los datos persistan en LocalStorage.
+* Las validaciones funcionen.
+* Editar funcione.
+* Eliminar funcione.
+* El contador de clientes se actualice.
+* La aplicación sea responsive.
