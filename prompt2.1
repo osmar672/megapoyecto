@@ -1,0 +1,296 @@
+Actúa como ingeniero de software senior responsable de los servicios operativos de una intranet escolar existente. Implementa código real, funcional y probado.
+
+## Preparación
+
+No comiences hasta que `feature/expansion-contracts` se haya integrado en `main`.
+
+Después ejecuta:
+
+```bash
+git switch main
+git pull origin main
+git switch -c feature/campus-operations
+```
+
+El proyecto utiliza React, TypeScript, Vite, React Router, CSS Modules, servicios compartidos, `localStorage` y módulos registrados mediante `feature.tsx`.
+
+No crees un proyecto independiente ni archivos HTML separados.
+
+## Archivos bajo tu responsabilidad
+
+Trabaja exclusivamente en:
+
+```text
+src/features/timeline/**
+src/features/campus-map/**
+src/features/emergencies/**
+src/features/transport/**
+src/features/cafeteria/**
+src/features/schedules/**
+```
+
+No modifiques:
+
+```text
+src/core/**
+src/components/layout/**
+src/features/auth/**
+src/features/users/**
+src/features/academics/**
+src/features/profiles/**
+src/features/announcements/**
+src/features/notifications/**
+package.json
+vite.config.ts
+```
+
+Si detectas que falta un contrato compartido, informa al equipo. No lo dupliques dentro de tu rama.
+
+Cada módulo debe tener su propio:
+
+* `feature.tsx`
+* Página.
+* Componentes.
+* Servicio o repositorio.
+* Validadores.
+* Datos demostrativos idempotentes.
+* Pruebas.
+* `searchProvider.ts` cuando corresponda.
+* `dashboardWidget.tsx` cuando corresponda.
+
+## Línea de tiempo
+
+Crea `/timeline` con eventos de:
+
+* Exámenes.
+* Vacaciones.
+* Ferias.
+* Actividades.
+* Deportes.
+* Entregas.
+* Reuniones.
+* Días especiales.
+* Simulacros.
+* Matrículas.
+
+Implementa filtros por hoy, semana, mes y año.
+
+Destaca los próximos eventos, permite abrir sus detalles y garantiza navegación por teclado. Incluye al menos 10 eventos ficticios.
+
+Cuando cambie un horario, la línea de tiempo debe reflejarlo mediante el evento `schedule:changed`.
+
+## Mapa virtual
+
+Crea `/campus-map`.
+
+Representa el campus mediante CSS o SVG accesible, sin depender de mapas externos.
+
+Incluye:
+
+* Aulas.
+* Dirección.
+* Biblioteca.
+* Laboratorios.
+* Gimnasio.
+* Cancha.
+* Soda.
+* Enfermería.
+* Baños.
+* Parqueo.
+* Entradas y salidas.
+* Punto de reunión.
+
+Implementa:
+
+* Buscador “¿Dónde queda...?”.
+* Filtros por tipo.
+* Selección de ubicación.
+* Panel de información.
+* Descripción textual equivalente al mapa.
+* Navegación mediante teclado.
+* Estructura preparada para sustituir los datos ficticios por un mapa real.
+
+## Centro de emergencias
+
+Crea `/emergencies`.
+
+Muestra:
+
+* Estado `NORMAL`, `PRECAUTION` o `EMERGENCY`.
+* Simulacros programados.
+* Historial de simulacros.
+* Evacuaciones.
+* Terremotos.
+* Incendios.
+* Emergencias médicas.
+* Incidentes críticos.
+* Comunicados oficiales.
+* Botón “Ver protocolo de emergencia”.
+
+Los usuarios pueden consultar información. Solo `ADMIN` y `STAFF` pueden modificar el estado o publicar información oficial.
+
+Cuando cambie el estado:
+
+* Emite `emergency:changed`.
+* Genera una notificación.
+* Actualiza el widget del dashboard.
+
+No incluyas tácticas ofensivas ni instrucciones para confrontar amenazas.
+
+## Transporte y buses
+
+Crea:
+
+```text
+/transport
+/transport/schedules
+```
+
+Implementa una simulación funcional con cuatro buses.
+
+Cada bus debe incluir:
+
+* Número.
+* Ruta.
+* Conductor ficticio.
+* Próxima parada.
+* Hora estimada.
+* Estado.
+* Posición simulada.
+
+Estados:
+
+* En ruta.
+* Próximo.
+* Retrasado.
+* Finalizado.
+
+Implementa un mapa visual accesible y actualización automática. Los intervalos deben limpiarse al desmontar el componente.
+
+Cuando esté activa la reducción de movimiento:
+
+* No animes desplazamientos.
+* Mantén disponible la información textual.
+* Evita transiciones rápidas.
+
+Emite `bus:updated` y permite que dashboard, buscador y asistente consulten el estado.
+
+## Horarios de buses
+
+Permite consultar:
+
+* Ruta.
+* Salida.
+* Paradas.
+* Hora aproximada por parada.
+* Llegada al colegio.
+* Salida del colegio.
+* Turno de mañana o tarde.
+* Búsqueda de rutas.
+
+Los datos deben relacionarse con los mismos buses del módulo de transporte.
+
+## Soda y cafetería
+
+Crea `/cafeteria`.
+
+Incluye como mínimo 15 productos ficticios con:
+
+* Imagen o recurso visual accesible.
+* Nombre.
+* Precio.
+* Categoría.
+* Disponibilidad.
+* Favorito.
+
+Categorías:
+
+* Comidas.
+* Bebidas.
+* Snacks.
+* Postres.
+* Saludable.
+
+Estados:
+
+* Disponible.
+* Pocas unidades.
+* Agotado.
+
+Implementa búsqueda, filtros, favoritos y estados vacíos. No uses imágenes remotas rotas; utiliza recursos existentes o elementos visuales locales.
+
+## Horario escolar
+
+Crea `/schedules`.
+
+Incluye:
+
+* Lunes a viernes.
+* Vista diaria.
+* Vista semanal.
+* Materia.
+* Profesor.
+* Aula.
+* Inicio.
+* Final.
+* Detección de clase actual.
+* Biblioteca.
+* Soda.
+* Laboratorios.
+* Actividades.
+* Clubes.
+* Transporte.
+
+Filtra el horario según el usuario autenticado. No muestres información perteneciente a otro estudiante si el rol no tiene permiso.
+
+Al modificar un horario con rol autorizado:
+
+* Guarda el cambio.
+* Emite `schedule:changed`.
+* Genera notificación.
+* Actualiza línea de tiempo, dashboard, búsqueda y asistente.
+
+## Integración
+
+Registra rutas y navegación solamente desde los `feature.tsx` de tus módulos.
+
+Agrega proveedores de búsqueda para:
+
+* Eventos.
+* Ubicaciones.
+* Buses.
+* Rutas.
+* Productos.
+* Horarios.
+
+Agrega widgets de dashboard para:
+
+* Próxima actividad.
+* Estado del transporte.
+* Próxima clase.
+* Estado de emergencia.
+
+Usa los servicios compartidos. No accedas directamente a claves de otros módulos ni dupliques datos.
+
+## Calidad
+
+* Diseño responsive.
+* Teclado y lectores de pantalla.
+* Respeto de temas y reducción de movimiento.
+* Formularios validados.
+* Modales funcionales.
+* Filtros funcionales.
+* Sin botones decorativos.
+* Sin datos reales.
+* Sin `TODO`.
+* Sin dependencias nuevas salvo autorización del equipo.
+
+Agrega pruebas para filtros, horarios, simulación, permisos, búsqueda, eventos y persistencia.
+
+Ejecuta:
+
+```bash
+npm run check
+```
+
+Después crea commits profesionales, sube `feature/campus-operations` y entrega una descripción lista para el PR.

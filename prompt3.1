@@ -1,0 +1,323 @@
+Actúa como ingeniero de software senior responsable de comunidad, comunicaciones y supervisión administrativa de una intranet escolar existente.
+
+Debes implementar todo el código, las interacciones, los datos demostrativos y las pruebas. No entregues solamente un diseño o una explicación.
+
+## Preparación
+
+Espera a que `feature/expansion-contracts` esté integrado en `main`.
+
+Después crea:
+
+```bash
+git switch main
+git pull origin main
+git switch -c feature/community-administration
+```
+
+El proyecto utiliza React, TypeScript, Vite, React Router, CSS Modules, servicios compartidos y `localStorage`.
+
+Extiende los módulos existentes. No reemplaces la aplicación ni crees páginas HTML independientes.
+
+## Archivos bajo tu responsabilidad
+
+Trabaja exclusivamente en:
+
+```text
+src/features/analytics/**
+src/features/achievements/**
+src/features/forum/**
+src/features/incidents/**
+src/features/announcements/**
+src/features/notifications/**
+```
+
+No modifiques:
+
+```text
+src/core/**
+src/components/layout/**
+src/features/auth/**
+src/features/users/**
+src/features/academics/**
+src/features/transport/**
+src/features/cafeteria/**
+src/features/schedules/**
+package.json
+vite.config.ts
+```
+
+Cada módulo debe incluir:
+
+* `feature.tsx`
+* Página.
+* Componentes.
+* Servicios o repositorios.
+* Validadores.
+* Datos demostrativos idempotentes.
+* Pruebas.
+* `searchProvider.ts` cuando corresponda.
+* `dashboardWidget.tsx` cuando corresponda.
+
+## Estadísticas administrativas
+
+Crea `/statistics`, accesible únicamente para `ADMIN`.
+
+Implementa gráficos y métricas de:
+
+### Nuevos registros
+
+* Hoy.
+* Semana.
+* Mes.
+* Año.
+
+### Abandono
+
+* Por mes.
+* Por año.
+* Por nivel educativo.
+
+Incluye:
+
+* Filtros.
+* Leyendas.
+* Tooltips accesibles.
+* Tabla equivalente para lectores de pantalla.
+* Datos ficticios.
+* Animaciones desactivables.
+* Estados vacíos.
+
+Construye los gráficos con CSS o SVG. No agregues una dependencia nueva si no es indispensable.
+
+## Sistema de logros
+
+Crea `/achievements`.
+
+Incluye al menos ocho logros:
+
+* Primera semana.
+* Asistencia perfecta.
+* Participación deportiva.
+* Participación cultural.
+* Buen rendimiento.
+* Participación en actividades.
+* Ayuda a la comunidad.
+* Actividades escolares completadas.
+
+Muestra:
+
+* Desbloqueados.
+* Bloqueados.
+* Progreso.
+* Insignias.
+* Porcentaje.
+* Filtros.
+
+Cuando se desbloquee un logro:
+
+* Guarda el cambio.
+* Emite `achievement:unlocked`.
+* Genera una notificación.
+* Actualiza el dashboard.
+
+La animación debe desactivarse con reducción de movimiento.
+
+## Foro escolar
+
+Crea `/forum`.
+
+Permite:
+
+* Crear publicaciones.
+* Comentar.
+* Responder comentarios.
+* Reaccionar.
+* Reportar contenido.
+* Buscar.
+* Filtrar por categoría.
+
+Categorías:
+
+* General.
+* Académico.
+* Deportes.
+* Tecnología.
+* Actividades.
+* Clubes.
+* Ayuda.
+
+Reglas:
+
+* Todos los perfiles autenticados pueden consultar.
+* Los perfiles permitidos pueden publicar y comentar.
+* Solo `ADMIN` puede ocultar, restaurar o cerrar publicaciones.
+* Una publicación reportada no debe eliminarse automáticamente.
+* Utiliza baja lógica para moderación.
+* Incluye confirmaciones antes de acciones destructivas.
+* Genera una notificación cuando otro usuario responda o comente.
+
+Agrega publicaciones y comentarios ficticios suficientes para probar el módulo.
+
+## Incidencias
+
+Crea `/incidents`.
+
+El formulario debe solicitar:
+
+* Tipo.
+* Descripción.
+* Lugar.
+* Fecha.
+* Prioridad.
+* Evidencia opcional.
+
+Tipos:
+
+* Tecnología.
+* Infraestructura.
+* Bullying.
+* Transporte.
+* Aula.
+* Limpieza.
+* Seguridad.
+* Otro.
+
+Estados:
+
+* Recibida.
+* En revisión.
+* En proceso.
+* Resuelta.
+* Cerrada.
+
+Permisos:
+
+* Estudiantes, docentes y personal pueden crear incidencias.
+* Un usuario normal solo puede consultar sus incidencias.
+* `ADMIN` puede consultar todas y cambiar el estado.
+* No muestres públicamente incidencias relacionadas con bullying o seguridad.
+
+La evidencia demostrativa debe validar tipo y tamaño. Evita almacenar archivos grandes; conserva metadatos y, si es necesario, una vista previa pequeña.
+
+Cuando cambie el estado:
+
+* Emite `incident:updated`.
+* Genera una notificación para el autor.
+* Actualiza inmediatamente la vista.
+
+Incluye al menos diez incidencias ficticias sin datos reales.
+
+## Centro de avisos
+
+Amplía el módulo existente y garantiza la ruta `/announcements`.
+
+Tipos:
+
+* Avisos.
+* Noticias.
+* Suspensión de clases.
+* Cambios de horario.
+* Actividades.
+* Comunicados.
+* Alertas.
+
+Prioridad:
+
+* Normal.
+* Importante.
+* Urgente.
+
+Implementa:
+
+* Consulta según audiencia.
+* Creación y edición por `ADMIN`.
+* Borradores.
+* Publicación.
+* Archivado.
+* Búsqueda y filtros.
+* Confirmaciones.
+* Diez avisos ficticios.
+
+Cuando se publique:
+
+* Emite `announcement:published`.
+* Genera notificaciones para la audiencia.
+* Un aviso urgente aparece en el dashboard.
+* Se incorpora a la búsqueda global.
+
+No dupliques el repositorio de comunicados existente; extiéndelo.
+
+## Centro de notificaciones
+
+Crea `/notifications`.
+
+Utiliza exclusivamente el `notificationService` compartido.
+
+Implementa:
+
+* Contador de no leídas.
+* Lista por usuario.
+* Filtros leído/no leído y tipo.
+* Marcar una notificación como leída.
+* Marcar todas como leídas.
+* Navegar al elemento relacionado.
+* Estados vacíos.
+* Persistencia.
+
+Debe recibir notificaciones de:
+
+* Nueva actividad.
+* Cambio de horario.
+* Aviso.
+* Logro.
+* Incidencia.
+* Bus.
+* Emergencia.
+* Comentario del foro.
+
+No crees una segunda fuente de notificaciones.
+
+## Integración
+
+Registra rutas y navegación mediante los archivos `feature.tsx`.
+
+Agrega proveedores de búsqueda para:
+
+* Avisos.
+* Publicaciones.
+* Incidencias cuando el usuario tenga permiso.
+
+Agrega widgets de dashboard para:
+
+* Avisos urgentes.
+* Logros recientes.
+* Actividad del foro.
+* Estado de incidencias.
+
+No edites el enrutador ni el menú central.
+
+## Accesibilidad y calidad
+
+* Interfaz responsive.
+* HTML semántico.
+* Foco visible.
+* Teclado.
+* `aria-live`.
+* Tablas equivalentes para gráficos.
+* Contraste adecuado.
+* Respeto de tema y reducción de movimiento.
+* Sin emojis como iconos.
+* Sin datos reales.
+* Sin botones decorativos.
+* Sin `TODO`.
+* Sin reglas de TypeScript desactivadas.
+
+Agrega pruebas para permisos, moderación, publicación, comentarios, incidencias, estadísticas y notificaciones.
+
+Ejecuta:
+
+```bash
+npm run check
+```
+
+Después crea commits profesionales, sube `feature/community-administration` y entrega una descripción lista para el PR.
