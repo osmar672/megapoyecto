@@ -21,6 +21,14 @@
 .form { display: grid; gap: var(--space-5); }
 .form button { width: 100%; margin-top: var(--space-1); }
 .status { min-height: 1.1rem; margin: calc(var(--space-2) * -1) 0; color: var(--color-danger); font-size: 0.82rem; font-weight: 600; }
+.demoAccess { margin-top: var(--space-6); border: 1px solid var(--color-line); border-radius: var(--radius-sm); background: white; }
+.demoAccess summary { padding: var(--space-4); color: var(--color-brand-deep); font-size: 0.82rem; font-weight: 700; cursor: pointer; }
+.demoAccess dl { display: grid; gap: var(--space-3); margin: 0; padding: 0 var(--space-4) var(--space-4); }
+.demoAccess dl div { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: var(--space-3); padding-top: var(--space-3); border-top: 1px solid var(--color-line); }
+.demoAccess dt { color: var(--color-ink-soft); font-size: 0.75rem; font-weight: 700; }
+.demoAccess dd { min-width: 0; margin: 0; color: var(--color-ink); font-size: 0.72rem; }
+.demoAccess dd code { overflow-wrap: anywhere; }
+.demoAccess dd span { display: block; margin-top: var(--space-1); color: var(--color-muted); }
 .support { margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--color-line); }
 .support strong { color: var(--color-ink); font-size: 0.84rem; }
 .support p { margin: var(--space-2) 0 0; color: var(--color-muted); font-size: 0.8rem; line-height: 1.5; }

@@ -1,4 +1,5 @@
 export type UserRole = "ADMIN" | "TEACHER" | "STUDENT_FAMILY";
+export type AnnouncementAudience = "ALL" | UserRole;
 
 export interface User {
   id: string;
@@ -82,7 +83,7 @@ export interface Announcement {
   id: string;
   title: string;
   body: string;
-  audience: UserRole[];
+  audience: AnnouncementAudience;
   status: "DRAFT" | "PUBLISHED" | "ARCHIVED";
   authorUserId: string;
   publishedAt?: string;
