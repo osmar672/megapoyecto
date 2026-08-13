@@ -1,0 +1,37 @@
+:root {
+  --color-brand-deep: #102d4f;
+  --color-brand: #155b8f;
+  --color-brand-hover: #0f4d7b;
+  --color-brand-soft: #dceef8;
+  --color-accent: #1e7f73;
+  --color-accent-soft: #def3ee;
+  --color-canvas: #f4f7f9;
+  --color-surface: #ffffff;
+  --color-surface-raised: #fbfcfd;
+  --color-ink: #172534;
+  --color-ink-soft: #526577;
+  --color-muted: #718293;
+  --color-line: #dbe3e9;
+  --color-danger: #a53232;
+  --color-danger-soft: #fbe7e7;
+  --color-warning: #8a5a08;
+  --color-warning-soft: #fff3cf;
+  --color-success: #216b50;
+  --color-success-soft: #e2f4eb;
+  --color-focus-ring: rgba(21, 91, 143, 0.32);
+  --font-sans: var(--font-geist-sans, "Segoe UI"), Arial, sans-serif;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --shadow-sm: 0 1px 2px rgba(16, 45, 79, 0.06);
+  --shadow-md: 0 12px 32px rgba(16, 45, 79, 0.1);
+  --transition: 160ms ease;
+}

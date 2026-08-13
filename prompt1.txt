@@ -1,0 +1,287 @@
+
+## Análisis del proyecto
+
+El PDF exige un prototipo funcional de intranet escolar y otorga un peso
+importante tanto al código como a la documentación. Los requisitos mínimos son:
+
+- Autenticación con tres perfiles: administración, docente y estudiante/familia.
+- Gestión de usuarios: alta, baja y edición.
+- Módulo académico: calificaciones y/o asistencia.
+- Tablón de comunicados: creación y consulta de avisos.
+- Restricción de información según el rol.
+- Interfaz clara, accesible y cuidadosa con los datos personales.
+- Código versionado en Git con ramas, commits y revisión.
+- Documentación obligatoria en `README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`,
+  `docs/arquitectura.md`, `docs/requerimientos.md` y `AGENTS.md`.
+
+La división propuesta evita que los tres integrantes editen los mismos archivos.
+El integrante 1 crea primero la base compartida y la integra en `main`. Después,
+los integrantes 2 y 3 crean sus ramas desde esa versión actualizada y trabajan
+en paralelo.
+
+## Contrato técnico compartido
+
+Estas decisiones son obligatorias para los tres integrantes:
+
+| Elemento                   | Decisión común                                                                    |
+| -------------------------- | --------------------------------------------------------------------------------- |
+| Stack                      | React, TypeScript y Vite                                                          |
+| Enrutamiento               | React Router                                                                      |
+| Estilos                    | CSS Modules y variables de `src/styles/tokens.css`                                |
+| Persistencia del prototipo | `localStorage`; sesión actual en `sessionStorage`                                 |
+| Pruebas                    | Vitest y React Testing Library                                                    |
+| Idioma de interfaz         | Español                                                                           |
+| Código                     | Nombres en inglés y `camelCase`; componentes en `PascalCase`                      |
+| Roles internos             | `ADMIN`, `TEACHER`, `STUDENT_FAMILY`                                              |
+| Identificadores            | `string`; usar `crypto.randomUUID()` para registros nuevos                        |
+| Fechas                     | Cadenas ISO 8601                                                                  |
+| Datos                      | Solo información ficticia; nunca datos reales de menores                          |
+| Integración                | Pull requests; no hacer push directo ni force push a `main`                       |
+| Calidad                    | Deben aprobar `npm run lint`, `npm run test`, `npm run build` y `npm run lint:md` |
+
+Claves de almacenamiento obligatorias:
+
+- `schoolIntranet.v1.users`
+- `schoolIntranet.v1.credentials`
+- `schoolIntranet.v1.students`
+- `schoolIntranet.v1.courses`
+- `schoolIntranet.v1.enrollments`
+- `schoolIntranet.v1.grades`
+- `schoolIntranet.v1.attendance`
+- `schoolIntranet.v1.announcements`
+- `schoolIntranet.v1.session`
+
+Rutas obligatorias:
+
+- `/login`
+- `/dashboard`
+- `/users`
+- `/academics/grades`
+- `/academics/attendance`
+- `/announcements`
+- `/403`
+- `*` para página no encontrada
+
+Modelos compartidos que deben existir en `src/core/types/domain.ts` desde la
+base:
+
+- `UserRole = 'ADMIN' | 'TEACHER' | 'STUDENT_FAMILY'`
+- `User`: `id`, `firstName`, `lastName`, `email`, `role`, `isActive`,
+  `relatedStudentId?`, `createdAt`, `updatedAt`.
+- `Credential`: `userId`, `passwordSalt`, `passwordHash`.
+- `AuthSession`: `userId`, `role`, `issuedAt`, `expiresAt`.
+- `Student`: `id`, `institutionalCode`, `firstName`, `lastName`, `gradeLevel`,
+  `section`, `isActive`.
+- `Course`: `id`, `code`, `name`, `teacherUserId`, `gradeLevel`, `section`,
+  `isActive`.
+- `Enrollment`: `id`, `studentId`, `courseId`, `academicYear`, `status`.
+- `Grade`: `id`, `studentId`, `courseId`, `period`, `score`, `maxScore`,
+  `comment?`, `recordedBy`, `createdAt`, `updatedAt`.
+- `AttendanceRecord`: `id`, `studentId`, `courseId`, `date`, `status`, `notes?`,
+  `recordedBy`, `createdAt`, `updatedAt`.
+- `Announcement`: `id`, `title`, `body`, `audience`, `status`, `authorUserId`,
+  `publishedAt?`, `createdAt`, `updatedAt`.
+
+Los módulos deben registrarse sin modificar un enrutador central. Cada área crea
+un archivo `feature.tsx` que exporta un `FeatureModule`. La base detecta
+automáticamente `src/features/**/feature.tsx` mediante `import.meta.glob`.
+`FeatureModule` contiene `id`, `routes` y `navigation`; cada ruta incluye
+`path`, `component` y `allowedRoles`.
+
+## Orden de trabajo e integración
+
+1. El integrante 1 termina `feature/foundation-auth-users`, abre un pull request
+   y se integra después de aprobar todas las verificaciones.
+2. Los integrantes 2 y 3 actualizan `main` y crean sus ramas desde ese mismo
+   commit.
+3. Ambos trabajan en paralelo sin modificar archivos compartidos.
+4. Se integra primero `feature/academic-module` y después
+   `feature/communications-docs`.
+5. El integrante 1 crea `integration/final-validation`, actualiza documentación
+   si hace falta y ejecuta la validación completa.
+6. Solo se integra a `main` cuando no hay errores de TypeScript, pruebas, lint
+   ni compilación.
+
+---
+
+## Prompt 1 - Integrante responsable de base, autenticación y usuarios
+
+Actúa como ingeniero de software senior responsable de construir la base
+técnica, la autenticación y la administración de usuarios de una intranet
+escolar para una institución pública. Trabajarás en la rama
+`feature/foundation-auth-users`. Debes implementar código real, ejecutable y
+comprobado; no entregues únicamente una explicación o un plan.
+
+### Objetivo
+
+Construir la base compartida sobre la cual trabajarán otros dos integrantes y
+completar los requisitos de autenticación por rol y gestión de usuarios. Tu pull
+request debe integrarse primero en `main` para que las otras ramas partan del
+mismo contrato técnico.
+
+### Stack obligatorio
+
+- React con TypeScript y Vite.
+- React Router para navegación.
+- CSS Modules para componentes y variables globales en `src/styles/tokens.css`.
+- Vitest y React Testing Library.
+- ESLint y markdownlint.
+- `localStorage` para datos de demostración y `sessionStorage` para la sesión.
+- No agregues Tailwind, Bootstrap, Material UI, Redux ni un backend.
+
+### Reglas generales de base y autenticación
+
+- Antes de cambiar archivos, inspecciona el repositorio, `package.json` y
+  cualquier `AGENTS.md` existente.
+- No uses emojis en la interfaz, el código, la documentación, los commits ni tu
+  respuesta.
+- Usa nombres internos en inglés, `camelCase` para variables y funciones, y
+  `PascalCase` para componentes y tipos.
+- La interfaz debe estar en español y tener apariencia profesional, sobria y
+  empresarial.
+- No uses datos reales. Todos los usuarios, estudiantes y cursos de ejemplo
+  deben ser ficticios.
+- No almacenes contraseñas en texto plano. Para este prototipo local, guarda un
+  `passwordSalt` y un `passwordHash` generado con Web Crypto. Documenta que este
+  mecanismo de navegador es demostrativo y que producción requeriría
+  autenticación en servidor con un algoritmo especializado.
+- No desactives reglas de TypeScript o ESLint para ocultar errores.
+- No dejes `TODO`, vistas vacías, botones sin función ni datos codificados
+  directamente dentro de componentes de presentación.
+
+### Contrato de roles y modelos
+
+En `src/core/types/domain.ts`, define y exporta exactamente estos roles:
+
+`UserRole = 'ADMIN' | 'TEACHER' | 'STUDENT_FAMILY'`.
+
+Define también `User`, `Credential`, `AuthSession`, `Student`, `Course`,
+`Enrollment`, `Grade`, `AttendanceRecord` y `Announcement` con los campos
+indicados en el contrato técnico compartido del proyecto. Utiliza `string` para
+identificadores y fechas ISO 8601. No cambies posteriormente nombres de campos
+sin coordinación con los otros integrantes.
+
+### Estructura bajo tu responsabilidad exclusiva
+
+- `src/app/**`
+- `src/core/**`
+- `src/components/layout/**`
+- `src/components/ui/**`
+- `src/styles/**`
+- `src/features/auth/**`
+- `src/features/users/**`
+- `src/test/**`
+- `package.json` y configuración de Vite, TypeScript, Vitest y ESLint
+
+No implementes los módulos académicos ni de comunicados. Solo define sus modelos
+compartidos para que los otros integrantes puedan importarlos.
+
+### Base modular requerida
+
+1. Crea `FeatureModule`, `AppRouteDefinition` y `NavItemDefinition` en
+   `src/core/types/feature.ts`.
+2. Implementa un registro que detecte automáticamente los archivos
+   `src/features/**/feature.tsx` con `import.meta.glob`, de modo que los otros
+   integrantes puedan agregar rutas y navegación sin editar `App.tsx`, el layout
+   o un arreglo central.
+3. Cada ruta protegida debe recibir `allowedRoles` y pasar por `ProtectedRoute`.
+4. Crea un `AppShell` accesible con encabezado, navegación lateral, enlace para
+   saltar al contenido, indicador textual del usuario y botón de cerrar sesión.
+5. Incluye páginas para acceso denegado y ruta no encontrada.
+6. Centraliza claves de almacenamiento en `src/core/storage/storageKeys.ts`
+   usando exactamente el prefijo `schoolIntranet.v1`.
+7. Expón un servicio de almacenamiento genérico con `get`, `set`, `remove` y
+   recuperación segura ante JSON inválido. Los demás módulos deben poder
+   importarlo sin copiar lógica.
+8. Agrega `ErrorBoundary`, estados vacíos, mensajes de error comprensibles y
+   confirmaciones antes de operaciones destructivas.
+
+### Autenticación
+
+Implementa:
+
+- `authService.login(email, password)`.
+- `authService.logout()`.
+- `authService.getSession()`.
+- `AuthProvider` y `useAuth()`.
+- Expiración verificable de sesión.
+- Redirección a `/login` cuando no existe sesión.
+- Redirección a `/403` cuando el rol no tiene autorización.
+- Tres cuentas ficticias: administrador, docente y estudiante/familia. Los
+  identificadores deben ser `usr_admin_001`, `usr_teacher_001` y
+  `usr_family_001`. El usuario familiar debe tener
+  `relatedStudentId: 'stu_001'`.
+- Credenciales de demostración visibles únicamente en la documentación de
+  ejecución, nunca impresas automáticamente dentro de la pantalla de acceso.
+
+### Gestión de usuarios
+
+En `/users`, accesible solamente para `ADMIN`, implementa:
+
+- Tabla o lista accesible de usuarios.
+- Búsqueda por nombre o correo.
+- Filtro por rol y estado.
+- Alta, edición y baja lógica mediante `isActive`.
+- Validación de nombre, apellido, correo institucional único y rol.
+- Prevención de baja del administrador que tiene la sesión activa.
+- Formulario con etiquetas asociadas, mensajes de error, foco visible y
+  navegación por teclado.
+- Separación entre componentes, servicio/repositorio, validadores y páginas.
+
+El archivo `src/features/users/feature.tsx` debe registrar `/users`, el elemento
+de navegación `Usuarios` y `allowedRoles: ['ADMIN']`.
+
+### Diseño y accesibilidad
+
+- Crea una identidad visual institucional, sobria y consistente.
+- Define en `tokens.css` colores, tipografía, espaciado, bordes, sombras y
+  estados de foco.
+- Mantén contraste equivalente a WCAG AA.
+- Usa HTML semántico, etiquetas de formulario, `aria-live` para mensajes
+  importantes y controles utilizables con teclado.
+- La aplicación debe funcionar en escritorio, tableta y móvil.
+- No uses emojis como iconos; utiliza texto, CSS o iconos SVG accesibles si ya
+  existen en el proyecto.
+
+### Datos de demostración
+
+Crea una inicialización idempotente: solo agrega datos de ejemplo cuando las
+claves no existen. Incluye usuarios, credenciales, el estudiante `stu_001` y
+registros mínimos de cursos y matrículas compatibles con los modelos
+compartidos. No reemplaces información que el usuario ya haya guardado.
+
+### Scripts y verificación
+
+Configura como mínimo:
+
+- `npm run dev`
+- `npm run lint`
+- `npm run test`
+- `npm run build`
+- `npm run lint:md`
+- `npm run check`, que ejecute todas las verificaciones anteriores salvo `dev`
+
+Agrega pruebas para inicio correcto, credenciales inválidas, protección de
+rutas, permisos del administrador, validación de correo duplicado, alta y baja
+lógica de usuarios, y recuperación ante almacenamiento corrupto.
+
+Ejecuta `npm install`, `npm run lint`, `npm run test`, `npm run build` y
+`npm run lint:md`. Corrige todos los errores antes de entregar. No afirmes que
+una comprobación pasó si no la ejecutaste.
+
+### Git y entrega de base y autenticación
+
+Usa commits pequeños y profesionales, por ejemplo:
+
+- `chore: initialize shared intranet foundation`
+- `feat: implement role based authentication`
+- `feat: add accessible user administration`
+- `test: cover authentication and user permissions`
+
+No hagas push directo ni force push a `main`. Al finalizar, entrega un resumen
+de archivos creados, decisiones técnicas, cuentas de prueba, comandos ejecutados
+y resultados. Incluye una descripción lista para el pull request y confirma que
+tu rama puede integrarse sin archivos generados como `node_modules`, `dist` o
+reportes de cobertura.
+
+---

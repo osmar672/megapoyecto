@@ -1,0 +1,6 @@
+.page { min-height: 100vh; display: grid; place-items: center; padding: var(--space-6); }
+.card { max-width: 34rem; padding: var(--space-8); background: white; border: 1px solid var(--color-line); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); }
+.eyebrow { color: var(--color-brand); font-size: 0.75rem; font-weight: 750; letter-spacing: 0.12em; text-transform: uppercase; }
+.card h1 { margin: var(--space-3) 0; color: var(--color-brand-deep); }
+.card p { line-height: 1.6; color: var(--color-ink-soft); }
+.card button { margin-top: var(--space-4); border: 0; border-radius: var(--radius-sm); padding: 0.75rem 1rem; color: white; background: var(--color-brand); cursor: pointer; }
