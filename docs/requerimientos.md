@@ -3,26 +3,29 @@
 ## Funcionales implementados
 
 - Acceso con perfiles `ADMIN`, `TEACHER` y `STUDENT_FAMILY`.
-- Expiración de sesión y cierre manual.
-- Redirección a acceso o página 403 según corresponda.
-- Panel de inicio con información restringida por perfil.
-- Lista accesible de usuarios para administración.
-- Búsqueda por nombre o correo y filtros de rol y estado.
+- Migración automática de credenciales incompatibles del prototipo anterior.
+- Expiración de sesión, cierre manual y protección de rutas por rol.
+- Panel con métricas calculadas desde los datos autorizados para cada perfil.
+- Consulta de cursos, calificaciones y asistencia.
+- Registro o actualización de calificaciones y asistencia por Administración y
+  docentes autorizados.
+- Restricción familiar por `relatedStudentId`.
+- Creación y edición de borradores de comunicados.
+- Publicación, archivo y eliminación de comunicados por Administración.
+- Filtrado de comunicados según estado, audiencia y autoría.
 - Registro, edición, desactivación y reactivación de usuarios.
-- Validación de correo institucional único.
-- Datos ficticios e inicialización idempotente.
-
-## Preparados para módulos posteriores
-
-- Modelos de estudiantes, cursos, matrículas, calificaciones, asistencia y
-  comunicados.
-- Rutas reservadas en el contrato del proyecto para módulos académicos y de
-  comunicaciones.
-- Registro automático de nuevos módulos sin modificar el enrutador central.
 
 ## No funcionales
 
 - Interfaz adaptable a escritorio, tableta y móvil.
 - Navegación por teclado, foco visible, etiquetas y regiones de estado.
-- TypeScript estricto, pruebas automatizadas y lint.
-- Datos almacenados en el dispositivo solo para fines demostrativos.
+- TypeScript estricto, pruebas automatizadas y análisis estático.
+- Un único punto de entrada y registro modular de funciones.
+- Datos ficticios almacenados en el dispositivo para la demostración.
+
+## Restricciones
+
+- No almacenar información real de menores.
+- No usar el almacenamiento del navegador como fuente de verdad en producción.
+- Mantener las claves `schoolIntranet.v1.*` para compatibilidad.
+- Registrar nuevos módulos mediante `src/features/**/feature.tsx`.

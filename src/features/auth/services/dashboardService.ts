@@ -1,4 +1,4 @@
-import type { Course, Student, User, UserRole } from "../../../core/types/domain";
+import type { Announcement, AttendanceRecord, Course, Enrollment, Grade, Student, User } from "../../../core/types/domain";
 import { localStorageService } from "../../../core/storage/storageService";
 import { storageKeys } from "../../../core/storage/storageKeys";
 
@@ -8,28 +8,41 @@ export interface DashboardMetric {
   detail: string;
 }
 
-export function getDashboardMetrics(role: UserRole): DashboardMetric[] {
+export function getDashboardMetrics(user: User): DashboardMetric[] {
   const users = localStorageService.get<User[]>(storageKeys.users, []).value;
   const students = localStorageService.get<Student[]>(storageKeys.students, []).value;
   const courses = localStorageService.get<Course[]>(storageKeys.courses, []).value;
+  const enrollments = localStorageService.get<Enrollment[]>(storageKeys.enrollments, []).value;
+  const grades = localStorageService.get<Grade[]>(storageKeys.grades, []).value;
+  const attendance = localStorageService.get<AttendanceRecord[]>(storageKeys.attendance, []).value;
+  const announcements = localStorageService.get<Announcement[]>(storageKeys.announcements, []).value;
 
-  if (role === "ADMIN") {
+  if (user.role === "ADMIN") {
     return [
-      { label: "Usuarios activos", value: String(users.filter((user) => user.isActive).length), detail: "Accesos institucionales habilitados" },
-      { label: "Perfiles docentes", value: String(users.filter((user) => user.role === "TEACHER" && user.isActive).length), detail: "Personal con acceso académico" },
-      { label: "Estudiantes", value: String(students.filter((student) => student.isActive).length), detail: "Registros de demostración" },
+      { label: "Usuarios activos", value: String(users.filter((candidate) => candidate.isActive).length), detail: "Accesos institucionales habilitados" },
+      { label: "Cursos activos", value: String(courses.filter((course) => course.isActive).length), detail: `${students.filter((student) => student.isActive).length} estudiantes registrados` },
+      { label: "Comunicados publicados", value: String(announcements.filter((announcement) => announcement.status === "PUBLISHED").length), detail: "Información disponible para la comunidad" },
     ];
   }
-  if (role === "TEACHER") {
+
+  if (user.role === "TEACHER") {
+    const courseIds = new Set(courses.filter((course) => course.isActive && course.teacherUserId === user.id).map((course) => course.id));
+    const studentIds = new Set(enrollments.filter((enrollment) => enrollment.status === "ACTIVE" && courseIds.has(enrollment.courseId)).map((enrollment) => enrollment.studentId));
     return [
-      { label: "Cursos asignados", value: String(courses.filter((course) => course.isActive).length), detail: "Carga académica activa" },
-      { label: "Secciones", value: "1", detail: "Grupo vinculado al perfil" },
-      { label: "Próxima revisión", value: "18 ago", detail: "Cierre parcial de seguimiento" },
+      { label: "Cursos asignados", value: String(courseIds.size), detail: "Carga académica activa" },
+      { label: "Estudiantes", value: String(studentIds.size), detail: "Matrículas en tus cursos" },
+      { label: "Registros académicos", value: String(grades.filter((grade) => courseIds.has(grade.courseId)).length + attendance.filter((record) => courseIds.has(record.courseId)).length), detail: "Calificaciones y asistencia registradas" },
     ];
   }
+
+  const student = students.find((candidate) => candidate.id === user.relatedStudentId);
+  const ownGrades = grades.filter((grade) => grade.studentId === user.relatedStudentId && grade.maxScore > 0);
+  const ownAttendance = attendance.filter((record) => record.studentId === user.relatedStudentId);
+  const average = ownGrades.length ? Math.round(ownGrades.reduce((total, grade) => total + grade.score / grade.maxScore * 100, 0) / ownGrades.length) : null;
+  const attendanceRate = ownAttendance.length ? Math.round(ownAttendance.filter((record) => record.status === "PRESENT").length / ownAttendance.length * 100) : null;
   return [
-    { label: "Estudiante vinculado", value: String(students.filter((student) => student.isActive).length), detail: "Perfil familiar autorizado" },
-    { label: "Nivel", value: students[0]?.gradeLevel ?? "Sin asignar", detail: students[0] ? `Sección ${students[0].section}` : "Pendiente de registro" },
-    { label: "Curso lectivo", value: "2026", detail: "Segundo trimestre" },
+    { label: "Promedio general", value: average === null ? "—" : `${average}%`, detail: `${ownGrades.length} evaluaciones disponibles` },
+    { label: "Asistencia presente", value: attendanceRate === null ? "—" : `${attendanceRate}%`, detail: `${ownAttendance.length} registros de asistencia` },
+    { label: "Nivel y sección", value: student?.gradeLevel ?? "—", detail: student ? `Sección ${student.section}` : "Sin estudiante vinculado" },
   ];
 }

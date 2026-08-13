@@ -2,6 +2,7 @@ import type { Credential, User } from "../../../core/types/domain";
 import { createSalt, hashPassword } from "../../../core/security/password";
 import { localStorageService } from "../../../core/storage/storageService";
 import { storageKeys } from "../../../core/storage/storageKeys";
+import { createId } from "../../../core/utils/createId";
 
 function readUsers(): User[] {
   return localStorageService.get<User[]>(storageKeys.users, []).value;
@@ -35,7 +36,7 @@ export const userRepository = {
   ): Promise<User> {
     const timestamp = new Date().toISOString();
     const user: User = {
-      id: crypto.randomUUID(),
+      id: createId("usr"),
       firstName: values.firstName.trim(),
       lastName: values.lastName.trim(),
       email: values.email.trim().toLowerCase(),

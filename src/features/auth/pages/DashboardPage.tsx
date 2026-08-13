@@ -9,7 +9,7 @@ import styles from "./DashboardPage.module.css";
 export function DashboardPage() {
   const { user } = useAuth();
   if (!user) return null;
-  const metrics = getDashboardMetrics(user.role);
+  const metrics = getDashboardMetrics(user);
 
   return (
     <div className={styles.page}>
@@ -37,12 +37,9 @@ export function DashboardPage() {
         <section className={styles.panel}>
           <div className={styles.panelHeader}><div><p className={styles.eyebrow}>Accesos frecuentes</p><h2>Continúa tu jornada</h2></div></div>
           <div className={styles.actions}>
-            {user.role === "ADMIN" ? (
-              <Link to="/users"><span>Administración</span><strong>Gestionar usuarios</strong><small>Altas, edición y control de acceso</small></Link>
-            ) : (
-              <article><span>Perfil habilitado</span><strong>Acceso verificado</strong><small>La información visible corresponde a tu rol institucional.</small></article>
-            )}
-            <article><span>Seguridad</span><strong>Sesión temporal activa</strong><small>El acceso se cerrará al completar el periodo de seguridad.</small></article>
+            <Link to="/academics"><span>Seguimiento</span><strong>{user.role === "STUDENT_FAMILY" ? "Consultar información académica" : "Gestionar área académica"}</strong><small>Calificaciones, cursos y asistencia autorizada</small></Link>
+            <Link to="/announcements"><span>Comunidad</span><strong>Revisar comunicados</strong><small>Información publicada para tu perfil</small></Link>
+            {user.role === "ADMIN" && <Link to="/users"><span>Administración</span><strong>Gestionar usuarios</strong><small>Altas, edición y control de acceso</small></Link>}
           </div>
         </section>
         <aside className={styles.sidePanel}>

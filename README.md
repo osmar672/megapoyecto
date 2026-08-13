@@ -1,59 +1,73 @@
 # Intranet Escolar
 
-Prototipo funcional de una intranet escolar para una institución pública. La
-aplicación ofrece autenticación por roles, sesiones con expiración,
-administración accesible de usuarios y una base modular para incorporar los
-módulos académicos y de comunicados.
+Aplicación unificada de intranet escolar construida con React, TypeScript, Vinext
+y React Router. Incluye autenticación por roles, panel principal, seguimiento
+académico, comunicados y administración de usuarios.
 
-## Tecnologías
+## Requisitos
 
-- React 19, TypeScript y Vite mediante Vinext.
-- React Router para navegación y protección de rutas.
-- CSS Modules y tokens globales de diseño.
-- Vitest, Testing Library, ESLint y markdownlint.
-- `localStorage` para datos del prototipo y `sessionStorage` para la sesión.
+- Node.js 22.13 o superior.
+- npm 10 o superior.
+- Git.
 
-## Ejecución
+## Instalación
+
+Desde la terminal de Visual Studio Code, en la carpeta del proyecto:
 
 ```bash
 npm install
 npm run dev
 ```
 
-La aplicación queda disponible en la dirección indicada por la terminal.
+Abre la dirección local que muestre Vite. No abras un archivo HTML con Live
+Server: la entrada correcta es la aplicación que inicia `npm run dev`.
 
-## Cuentas de demostración
+## Accesos de demostración
 
 | Perfil | Correo | Contraseña |
 | --- | --- | --- |
 | Administración | `admin@colegiohorizonte.edu.cr` | `Admin2026!` |
 | Docente | `docente@colegiohorizonte.edu.cr` | `Docente2026!` |
-| Estudiante y familia | `familia@colegiohorizonte.edu.cr` | `Familia2026!` |
+| Estudiante/Familia | `familia@colegiohorizonte.edu.cr` | `Familia2026!` |
 
-Los datos son ficticios. Las contraseñas se almacenan como hash con salt. Este
-mecanismo del navegador es exclusivamente demostrativo: una aplicación en
-producción debe autenticar en servidor y utilizar un algoritmo especializado
-para contraseñas.
+Si el navegador conserva datos del prototipo anterior, la aplicación migra las
+cuentas antiguas automáticamente al iniciar.
 
-## Verificación
+## Qué ve cada perfil
 
-```bash
-npm run lint
-npm run test
-npm run build
-npm run lint:md
-npm run check
+- `ADMIN`: panel institucional, datos académicos de todos los cursos,
+  comunicados y gestión de usuarios.
+- `TEACHER`: sus cursos y estudiantes, registro de calificaciones y asistencia,
+  además de creación de borradores de comunicados.
+- `STUDENT_FAMILY`: únicamente las calificaciones y la asistencia del estudiante
+  vinculado, más los comunicados publicados para su audiencia.
+
+Solo Administración puede publicar, archivar o eliminar comunicados.
+
+## Estructura principal
+
+```text
+src/
+├── app/                    # Composición y rutas
+├── components/             # Interfaz reutilizable
+├── core/                   # Tipos, seguridad y almacenamiento
+└── features/
+    ├── academics/          # Calificaciones y asistencia
+    ├── announcements/      # Comunicados
+    ├── auth/               # Acceso y panel principal
+    └── users/              # Administración de cuentas
 ```
 
-## Estructura modular
+Cada módulo registra sus rutas y su navegación mediante `feature.tsx`; no se
+agregan rutas manualmente al enrutador central.
 
-Cada módulo crea un archivo `src/features/**/feature.tsx`. El registro de
-funciones lo detecta automáticamente y agrega sus rutas y navegación sin
-modificar el enrutador central.
+## Verificación antes de subir a GitHub
 
-## Persistencia
+```bash
+npm run check
+npm run validate:artifact
+```
 
-Los datos se conservan en el navegador del dispositivo. Para restaurar la
-demostración se pueden eliminar las claves que comienzan con
-`schoolIntranet.v1` desde las herramientas del navegador. La inicialización es
-idempotente y no reemplaza información existente.
+Los datos son ficticios y se guardan en el navegador para fines de demostración.
+No utilices información real de estudiantes o familias. Para producción se debe
+usar autenticación y almacenamiento del lado del servidor.

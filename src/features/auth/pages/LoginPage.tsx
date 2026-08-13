@@ -87,6 +87,14 @@ export function LoginPage() {
               {submitting ? "Verificando acceso" : "Ingresar a la intranet"}
             </Button>
           </form>
+          <details className={styles.demoAccess}>
+            <summary>Ver accesos de demostración</summary>
+            <dl>
+              <div><dt>Administración</dt><dd><code>admin@colegiohorizonte.edu.cr</code><span>Contraseña: <code>Admin2026!</code></span></dd></div>
+              <div><dt>Docente</dt><dd><code>docente@colegiohorizonte.edu.cr</code><span>Contraseña: <code>Docente2026!</code></span></dd></div>
+              <div><dt>Familia</dt><dd><code>familia@colegiohorizonte.edu.cr</code><span>Contraseña: <code>Familia2026!</code></span></dd></div>
+            </dl>
+          </details>
           <div className={styles.support}>
             <strong>¿Problemas para ingresar?</strong>
             <p>Solicita asistencia a la administración del centro educativo.</p>
