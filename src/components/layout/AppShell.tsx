@@ -1,10 +1,16 @@
 "use client";
 
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useState,
+  type KeyboardEvent as ReactKeyboardEvent,
+  type ReactNode,
+} from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { appEventBus } from "../../core/events/appEventBus";
 import { registeredNavigation } from "../../core/featureRegistry";
-import { notificationService } from "../../core/notifications/notificationService";
+import { useUnreadNotificationCount } from "../../core/notifications/useUnreadNotificationCount";
 import { searchProviderRegistry } from "../../core/search/searchProviderRegistry";
 import { roleLabels } from "../../core/utils/roleLabels";
 import { useAuth } from "../../features/auth/context/AuthContext";
@@ -16,25 +22,73 @@ export function AppShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [notificationVersion, setNotificationVersion] = useState(0);
-  const navigation = registeredNavigation.filter((item) =>
-    user ? item.allowedRoles.includes(user.role) : false,
+  const [activeSearchIndex, setActiveSearchIndex] = useState(-1);
+  const deferredQuery = useDeferredValue(query);
+  const navigation = useMemo(
+    () =>
+      registeredNavigation.filter((item) =>
+        user ? item.allowedRoles.includes(user.role) : false,
+      ),
+    [user],
   );
   const searchResults = useMemo(
-    () => user ? searchProviderRegistry.search(query, { userId: user.id, role: user.role }).slice(0, 8) : [],
-    [query, user],
+    () =>
+      user
+        ? searchProviderRegistry
+            .search(deferredQuery, {
+              userId: user.id,
+              role: user.role,
+              relatedStudentId: user.relatedStudentId,
+            })
+            .slice(0, 8)
+        : [],
+    [deferredQuery, user],
   );
-  const unreadCount = user ? notificationService.getUnreadCount(user.id) : 0;
+  const unreadCount = useUnreadNotificationCount(user?.id);
+  const searchOpen = Boolean(query.trim());
 
-  useEffect(() => appEventBus.on("notification:created", () => {
-    setNotificationVersion((current) => current + 1);
-  }), []);
-
-  void notificationVersion;
+  useEffect(() => {
+    if (!menuOpen) return;
+    const closeMenuOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+    document.addEventListener("keydown", closeMenuOnEscape);
+    return () => document.removeEventListener("keydown", closeMenuOnEscape);
+  }, [menuOpen]);
 
   const handleLogout = () => {
     logout();
     navigate("/login", { replace: true });
+  };
+
+  const navigateToSearchResult = (path: string) => {
+    setQuery("");
+    setActiveSearchIndex(-1);
+    navigate(path);
+  };
+
+  const handleSearchKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Escape") {
+      setQuery("");
+      setActiveSearchIndex(-1);
+      return;
+    }
+    if (searchResults.length === 0) return;
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setActiveSearchIndex((current) => (current + 1) % searchResults.length);
+    }
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setActiveSearchIndex((current) =>
+        current <= 0 ? searchResults.length - 1 : current - 1,
+      );
+    }
+    if (event.key === "Enter" && activeSearchIndex >= 0) {
+      event.preventDefault();
+      const result = searchResults[activeSearchIndex];
+      if (result) navigateToSearchResult(result.path);
+    }
   };
 
   return (
@@ -82,9 +136,27 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
         {user && <div className={styles.search}>
           <label htmlFor="global-search">Búsqueda global</label>
-          <input id="global-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Personas, lugares, eventos..." autoComplete="off" />
-          {query.trim() && <div className={styles.searchResults} role="listbox" aria-label="Resultados de búsqueda">
-            {searchResults.length === 0 ? <p role="status">No hay resultados.</p> : searchResults.map((result) => <button key={`${result.source}-${result.id}`} type="button" role="option" aria-selected="false" onClick={() => { setQuery(""); navigate(result.path); }}><span>{result.category}</span><strong>{result.title}</strong><small>{result.description}</small></button>)}
+          <input
+            id="global-search"
+            type="search"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded={searchOpen}
+            aria-controls="global-search-results"
+            aria-activedescendant={
+              activeSearchIndex >= 0 ? `global-search-result-${activeSearchIndex}` : undefined
+            }
+            value={query}
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setActiveSearchIndex(-1);
+            }}
+            onKeyDown={handleSearchKeyDown}
+            placeholder="Personas, lugares, eventos..."
+            autoComplete="off"
+          />
+          {searchOpen && <div id="global-search-results" className={styles.searchResults} role="listbox" aria-label="Resultados de búsqueda">
+            {searchResults.length === 0 ? <p role="status">No hay resultados.</p> : searchResults.map((result, index) => <button id={`global-search-result-${index}`} key={`${result.source}-${result.id}`} type="button" role="option" aria-selected={activeSearchIndex === index} onMouseEnter={() => setActiveSearchIndex(index)} onClick={() => navigateToSearchResult(result.path)}><span>{result.category}</span><strong>{result.title}</strong><small>{result.description}</small></button>)}
           </div>}
         </div>}
         {user && (

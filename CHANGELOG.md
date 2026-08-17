@@ -9,6 +9,9 @@
 - Búsqueda global y widgets del panel descubiertos automáticamente.
 - Datos semilla idempotentes y cobertura de pruebas para los nuevos módulos.
 - Verificación de tipos dentro del chequeo completo del proyecto.
+- Pruebas de componentes para autenticación, notificaciones y foco del modal.
+- Validación del HTML renderizado como parte obligatoria del build.
+- Verificación oficial de compatibilidad de Vinext dentro de `npm run check`.
 
 ### Corregido
 
@@ -16,11 +19,20 @@
 - Permisos y navegación por rol para las nuevas rutas.
 - Cálculo de las horas de parada de las rutas de transporte.
 - Permisos de ejecución de los scripts utilizados por el entorno de build.
+- Autorización académica y privacidad de horarios para cada rol.
+- Sincronización del contador de notificaciones y salida segura de la carga inicial.
+- Alta atómica de usuarios y validación del estudiante vinculado.
+- Cálculo de próximos eventos, métricas de personal y persistencia de evidencias.
+- Navegación por teclado, foco visible, reducción de movimiento y búsqueda móvil.
+- Migración a Vinext 1.0 beta con compatibilidad completa y audit de npm limpio.
 
 ### Eliminado
 
 - Copias independientes y no integradas del frontend que duplicaban módulos,
   rompían el lint del repositorio y no formaban parte del despliegue principal.
+- Configuración y dependencias de Tailwind/PostCSS que no participaban en los estilos.
+- Recursos iniciales de Vite sin referencias y un archivo de texto vacío.
+- Carga externa de Google Fonts; la interfaz utiliza la pila tipográfica del sistema.
 
 ## 0.1.0 - 2026-08-13
 

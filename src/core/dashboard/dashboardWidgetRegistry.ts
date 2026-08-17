@@ -13,10 +13,6 @@ export interface DashboardWidgetDefinition {
   order: number;
 }
 
-interface DashboardWidgetModule {
-  default: DashboardWidgetDefinition;
-}
-
 export class DashboardWidgetRegistry {
   private readonly widgets = new Map<string, DashboardWidgetDefinition>();
 
@@ -35,11 +31,11 @@ export class DashboardWidgetRegistry {
   }
 }
 
-const modules = import.meta.glob<DashboardWidgetModule>(
+const modules = import.meta.glob(
   "../../features/**/dashboardWidget.tsx",
-  { eager: true },
-);
+  { eager: true, import: "default" },
+) as Record<string, DashboardWidgetDefinition>;
 
 export const dashboardWidgetRegistry = new DashboardWidgetRegistry(
-  Object.values(modules).map((module) => module.default),
+  Object.values(modules),
 );

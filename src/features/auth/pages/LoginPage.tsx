@@ -8,7 +8,7 @@ import { useAuth } from "../context/AuthContext";
 import styles from "./LoginPage.module.css";
 
 export function LoginPage() {
-  const { user, isLoading, login } = useAuth();
+  const { user, isLoading, initializationError, login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [email, setEmail] = useState("");
@@ -82,8 +82,8 @@ export function LoginPage() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
             />
-            <div className={styles.status} aria-live="assertive">{error}</div>
-            <Button type="submit" disabled={submitting || isLoading}>
+            <div className={styles.status} aria-live="assertive">{error || initializationError}</div>
+            <Button type="submit" disabled={submitting || isLoading || Boolean(initializationError)}>
               {submitting ? "Verificando acceso" : "Ingresar a la intranet"}
             </Button>
           </form>

@@ -6,7 +6,7 @@
     "MD041": false
   },
   "ignores": [
-    "promts.md",
+    "docs/archive/prompts/promts.md",
     "Integrante_3_Comunicados_Dashboard_Documentacion/**"
   ]
 }

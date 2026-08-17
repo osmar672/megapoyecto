@@ -33,4 +33,9 @@ export const timelineRepository = {
       return eventTime >= start.getTime() && eventTime <= end;
     });
   },
+
+  findNext(role: UserRole, from = new Date()): TimelineEvent | undefined {
+    const fromTime = from.getTime();
+    return this.list(role).find((event) => new Date(event.startsAt).getTime() >= fromTime);
+  },
 };

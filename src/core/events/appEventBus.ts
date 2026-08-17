@@ -16,6 +16,7 @@ export interface AppEventMap {
   "bus:updated": { bus: Bus };
   "emergency:changed": { notice: EmergencyNotice };
   "notification:created": { notification: Notification };
+  "notification:changed": { userId: string };
 }
 
 export type AppEventName = keyof AppEventMap;

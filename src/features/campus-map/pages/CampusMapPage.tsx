@@ -5,12 +5,12 @@ import { EmptyState, FeatureHeader, StatusBadge, featureStyles as styles } from 
 import { campusMapRepository } from "../services/campusMapRepository";
 
 export function CampusMapPage() {
-  const locations = campusMapRepository.list();
+  const locations = useMemo(() => campusMapRepository.list(), []);
   const types = useMemo(() => [...new Set(locations.map((location) => location.type))].sort(), [locations]);
   const [query, setQuery] = useState("");
   const [type, setType] = useState("ALL");
   const [selectedId, setSelectedId] = useState(locations[0]?.id ?? "");
-  const filtered = campusMapRepository.search(query, type);
+  const filtered = useMemo(() => campusMapRepository.search(query, type), [query, type]);
   const selected = locations.find((location) => location.id === selectedId);
 
   return (

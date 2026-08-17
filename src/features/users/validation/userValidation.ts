@@ -10,7 +10,7 @@ export interface UserFormValues {
   temporaryPassword: string;
 }
 
-export type UserFormErrors = Partial<Record<keyof UserFormValues, string>>;
+export type UserFormErrors = Partial<Record<keyof UserFormValues | "form", string>>;
 
 const institutionalEmailPattern = /^[^\s@]+@colegiohorizonte\.edu\.cr$/i;
 
@@ -29,8 +29,12 @@ export function validateUserForm(
   if (!(["ADMIN", "TEACHER", "STUDENT_FAMILY", "STAFF"] as UserRole[]).includes(values.role)) {
     errors.role = "Selecciona un rol válido.";
   }
-  if (values.role === "STUDENT_FAMILY" && !values.relatedStudentId.trim()) {
-    errors.relatedStudentId = "Indica el identificador del estudiante relacionado.";
+  if (values.role === "STUDENT_FAMILY") {
+    if (!values.relatedStudentId.trim()) {
+      errors.relatedStudentId = "Indica el identificador del estudiante relacionado.";
+    } else if (!userRepository.relatedStudentExists(values.relatedStudentId)) {
+      errors.relatedStudentId = "No existe un estudiante activo con este identificador.";
+    }
   }
   if (!editingUserId && values.temporaryPassword.length < 8) {
     errors.temporaryPassword = "La contraseña temporal debe tener al menos 8 caracteres.";

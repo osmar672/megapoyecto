@@ -1,3 +1,30 @@
-import type { SearchProvider } from "../../core/search/searchProviderRegistry"; import { localStorageService } from "../../core/storage/storageService"; import { storageKeys } from "../../core/storage/storageKeys"; import type { ScheduleEntry } from "../../core/types/domain";
-const provider: SearchProvider = { id: "schedules", search(query, context) { const normalized = query.toLocaleLowerCase("es"); return localStorageService.get<ScheduleEntry[]>(storageKeys.scheduleEntries, []).value.filter((entry) => `${entry.subject} ${entry.teacherName} ${entry.location}`.toLocaleLowerCase("es").includes(normalized)).map((entry) => ({ id: entry.id, category: "SCHEDULES", title: entry.subject, description: `${entry.startTime} · ${entry.location}`, path: "/schedules", keywords: [entry.teacherName], allowedRoles: [context.role], source: "schedules" })); } };
+import type { SearchProvider } from "../../core/search/searchProviderRegistry";
+import { scheduleRepository } from "./services/scheduleRepository";
+
+const provider: SearchProvider = {
+  id: "schedules",
+  search(query, context) {
+    const normalized = query.toLocaleLowerCase("es");
+    return scheduleRepository
+      .listForUser({
+        id: context.userId,
+        role: context.role,
+        relatedStudentId: context.relatedStudentId,
+      })
+      .filter((entry) => `${entry.subject} ${entry.teacherName} ${entry.location}`
+        .toLocaleLowerCase("es")
+        .includes(normalized))
+      .map((entry) => ({
+        id: entry.id,
+        category: "SCHEDULES",
+        title: entry.subject,
+        description: `${entry.startTime} · ${entry.location}`,
+        path: "/schedules",
+        keywords: [entry.teacherName],
+        allowedRoles: [context.role],
+        source: "schedules",
+      }));
+  },
+};
+
 export default provider;

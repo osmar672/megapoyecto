@@ -25,6 +25,8 @@ describe("notificationService", () => {
   });
 
   it("marca una, restaura su estado y marca todas las notificaciones", () => {
+    const changedListener = vi.fn();
+    appEventBus.on("notification:changed", changedListener);
     const first = notificationService.create({
       userId: "usr_staff_001",
       type: "SYSTEM",
@@ -44,5 +46,7 @@ describe("notificationService", () => {
     expect(notificationService.markAllRead("usr_staff_001")).toBe(2);
     expect(notificationService.getUnreadCount("usr_staff_001")).toBe(0);
     expect(notificationService.markAllRead("usr_staff_001")).toBe(0);
+    expect(changedListener).toHaveBeenCalledTimes(3);
+    expect(changedListener).toHaveBeenLastCalledWith({ userId: "usr_staff_001" });
   });
 });

@@ -4,6 +4,21 @@ import { localStorageService, sessionStorageService } from "../../../core/storag
 import { storageKeys } from "../../../core/storage/storageKeys";
 
 const sessionDurationMs = 8 * 60 * 60 * 1000;
+const userRoles = new Set(["ADMIN", "TEACHER", "STUDENT_FAMILY", "STAFF"]);
+
+function isAuthSession(value: unknown): value is AuthSession {
+  if (!value || typeof value !== "object") return false;
+  const candidate = value as Record<string, unknown>;
+  return (
+    typeof candidate.userId === "string" &&
+    typeof candidate.role === "string" &&
+    userRoles.has(candidate.role) &&
+    typeof candidate.issuedAt === "string" &&
+    Number.isFinite(Date.parse(candidate.issuedAt)) &&
+    typeof candidate.expiresAt === "string" &&
+    Number.isFinite(Date.parse(candidate.expiresAt))
+  );
+}
 
 export class AuthenticationError extends Error {
   constructor(message: string) {
@@ -54,7 +69,11 @@ export const authService = {
   },
 
   getSession(): AuthSession | null {
-    const result = sessionStorageService.get<AuthSession | null>(storageKeys.session, null);
+    const result = sessionStorageService.get<AuthSession | null>(
+      storageKeys.session,
+      null,
+      (value): value is AuthSession | null => value === null || isAuthSession(value),
+    );
     const session = result.value;
     if (!session || new Date(session.expiresAt).getTime() <= Date.now()) {
       this.logout();

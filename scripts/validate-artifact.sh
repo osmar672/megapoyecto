@@ -34,4 +34,6 @@ if (!worker.default || typeof worker.default.fetch !== "function") {
 }
 NODE
 
-echo "Validated Sites artifact: ESM Worker default.fetch and hosting manifest are present."
+node --test "${SITES_PROJECT_ROOT}/tests/rendered-html.test.mjs"
+
+echo "Validated Sites artifact: Worker, hosting manifest, and rendered HTML are correct."

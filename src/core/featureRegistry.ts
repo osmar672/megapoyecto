@@ -1,15 +1,11 @@
 import type { FeatureModule } from "./types/feature";
 
-interface FeatureImport {
-  default: FeatureModule;
-}
-
-const modules = import.meta.glob<FeatureImport>("../features/**/feature.tsx", {
+const modules = import.meta.glob("../features/**/feature.tsx", {
   eager: true,
-});
+  import: "default",
+}) as Record<string, FeatureModule>;
 
 export const featureModules = Object.values(modules)
-  .map((module) => module.default)
   .sort((first, second) => first.id.localeCompare(second.id));
 
 export const registeredRoutes = featureModules.flatMap((module) => module.routes);

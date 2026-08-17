@@ -50,8 +50,11 @@ function readData(): AcademicView {
 function allowedCourseIds(user: User, data: AcademicView): Set<string> {
   if (user.role === "ADMIN") return new Set(data.courses.filter((course) => course.isActive).map((course) => course.id));
   if (user.role === "TEACHER") return new Set(data.courses.filter((course) => course.isActive && course.teacherUserId === user.id).map((course) => course.id));
-  const studentId = user.relatedStudentId;
-  return new Set(data.enrollments.filter((enrollment) => enrollment.status === "ACTIVE" && enrollment.studentId === studentId).map((enrollment) => enrollment.courseId));
+  if (user.role === "STUDENT_FAMILY") {
+    const studentId = user.relatedStudentId;
+    return new Set(data.enrollments.filter((enrollment) => enrollment.status === "ACTIVE" && enrollment.studentId === studentId).map((enrollment) => enrollment.courseId));
+  }
+  return new Set();
 }
 
 function allowedStudentIds(user: User, data: AcademicView, courseIds: Set<string>): Set<string> {
@@ -60,7 +63,9 @@ function allowedStudentIds(user: User, data: AcademicView, courseIds: Set<string
 }
 
 function ensureWriteAccess(user: User, data: AcademicView, studentId: string, courseId: string): void {
-  if (user.role === "STUDENT_FAMILY") throw new AcademicRepositoryError("Este perfil solo puede consultar información académica.");
+  if (user.role !== "ADMIN" && user.role !== "TEACHER") {
+    throw new AcademicRepositoryError("Este perfil solo puede consultar información académica.");
+  }
   const course = data.courses.find((candidate) => candidate.id === courseId && candidate.isActive);
   if (!course || (user.role === "TEACHER" && course.teacherUserId !== user.id)) {
     throw new AcademicRepositoryError("No tienes permisos sobre el curso seleccionado.");

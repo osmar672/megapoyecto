@@ -19,7 +19,7 @@
   --color-success: #216b50;
   --color-success-soft: #e2f4eb;
   --color-focus-ring: rgba(21, 91, 143, 0.32);
-  --font-sans: var(--font-geist-sans, "Segoe UI"), Arial, sans-serif;
+  --font-sans: "Segoe UI", Arial, sans-serif;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;

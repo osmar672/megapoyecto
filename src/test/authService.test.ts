@@ -30,4 +30,11 @@ describe("authService", () => {
     );
     expect(authService.getSession()).toBeNull();
   });
+
+  it("descarta una sesión almacenada con forma inválida", () => {
+    sessionStorage.setItem(storageKeys.session, JSON.stringify({ userId: 123, role: "ADMIN" }));
+
+    expect(authService.getSession()).toBeNull();
+    expect(sessionStorage.getItem(storageKeys.session)).toBeNull();
+  });
 });

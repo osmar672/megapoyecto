@@ -36,4 +36,15 @@ describe("academicRepository", () => {
       status: "PRESENT",
     })).toThrow("solo puede consultar");
   });
+
+  it("impide que personal administrativo escriba datos académicos", async () => {
+    const staff = await authService.login("personal@colegiohorizonte.edu.cr", "Personal2026!");
+    expect(() => academicRepository.saveGrade(staff, {
+      studentId: "stu_001",
+      courseId: "crs_math_001",
+      period: "II trimestre",
+      score: 90,
+      maxScore: 100,
+    })).toThrow("solo puede consultar");
+  });
 });

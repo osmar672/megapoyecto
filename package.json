@@ -12,42 +12,46 @@
     "start": "vinext start",
     "test": "vitest run --config vitest.config.ts",
     "typecheck": "tsc --noEmit --pretty false --incremental false",
+    "check:vinext": "vinext check",
     "validate:artifact": "bash scripts/validate-artifact.sh",
     "lint": "bash scripts/sites-env.sh -- eslint . --ignore-pattern dist --ignore-pattern .next",
     "lint:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#dist\" \"#.next\"",
-    "check": "npm run lint && npm run typecheck && npm run test && npm run build && npm run lint:md",
+    "check": "npm run lint && npm run typecheck && npm run test && npm run check:vinext && npm run build && npm run lint:md",
     "db:generate": "bash scripts/sites-env.sh -- drizzle-kit generate"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2",
-    "next": "16.2.6",
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
-    "react-router-dom": "7.9.4"
+    "next": "16.3.1",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-router-dom": "7.18.2"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "1.37.1",
-    "@tailwindcss/postcss": "4.2.1",
+    "@cloudflare/vite-plugin": "1.52.1",
     "@testing-library/jest-dom": "6.9.1",
-    "@testing-library/react": "16.3.0",
-    "@testing-library/user-event": "14.6.1",
+    "@testing-library/react": "16.3.2",
+    "@testing-library/user-event": "14.6.4",
     "@types/node": "22.19.19",
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react": "6.0.2",
-    "@vitejs/plugin-rsc": "0.5.26",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "@vitejs/plugin-react": "6.0.5",
+    "@vitejs/plugin-rsc": "0.5.34",
     "drizzle-kit": "0.31.10",
     "eslint": "9.39.4",
-    "eslint-config-next": "16.2.6",
+    "eslint-config-next": "16.3.1",
     "jsdom": "27.0.1",
-    "markdownlint-cli2": "0.19.0",
-    "react-server-dom-webpack": "19.2.6",
-    "tailwindcss": "4.2.1",
+    "markdownlint-cli2": "0.23.2",
+    "react-server-dom-webpack": "19.2.8",
     "typescript": "5.9.3",
-    "vinext": "0.0.50",
-    "vite": "8.0.13",
-    "vitest": "4.0.4",
-    "wrangler": "4.92.0"
+    "vinext": "1.0.0-beta.6",
+    "vite": "8.2.1",
+    "vitest": "4.1.10",
+    "wrangler": "4.123.0"
+  },
+  "overrides": {
+    "@esbuild-kit/core-utils": {
+      "esbuild": "0.25.12"
+    }
   },
   "type": "module",
   "displayName": "Intranet Escolar"

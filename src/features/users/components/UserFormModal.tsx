@@ -42,14 +42,50 @@ export function UserFormModal({
   const [errors, setErrors] = useState<UserFormErrors>({});
   const [saving, setSaving] = useState(false);
   const firstFieldRef = useRef<HTMLInputElement>(null);
+  const modalRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    const previouslyFocused = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null;
     firstFieldRef.current?.focus();
-  }, []);
+
+    const handleDialogKeys = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
+        return;
+      }
+      if (event.key !== "Tab") return;
+
+      const focusableElements = Array.from(
+        modalRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ) ?? [],
+      );
+      const first = focusableElements[0];
+      const last = focusableElements.at(-1);
+      if (!first || !last) return;
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleDialogKeys);
+    return () => {
+      document.removeEventListener("keydown", handleDialogKeys);
+      previouslyFocused?.focus();
+    };
+  }, [onClose]);
 
   const updateValue = (field: keyof UserFormValues, value: string) => {
     setValues((current) => ({ ...current, [field]: value }));
-    setErrors((current) => ({ ...current, [field]: undefined }));
+    setErrors((current) => ({ ...current, [field]: undefined, form: undefined }));
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -77,7 +113,9 @@ export function UserFormModal({
         onSaved("El usuario fue creado y quedó activo.");
       }
     } catch (error) {
-      setErrors({ email: error instanceof Error ? error.message : "No fue posible guardar el usuario." });
+      setErrors({
+        form: error instanceof Error ? error.message : "No fue posible guardar el usuario.",
+      });
     } finally {
       setSaving(false);
     }
@@ -85,7 +123,7 @@ export function UserFormModal({
 
   return (
     <div className={styles.backdrop} role="presentation" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
-      <section className={styles.modal} role="dialog" aria-modal="true" aria-labelledby="user-form-title">
+      <section ref={modalRef} className={styles.modal} role="dialog" aria-modal="true" aria-labelledby="user-form-title">
         <header className={styles.header}>
           <div><p>{user ? "Edición de acceso" : "Nuevo acceso institucional"}</p><h2 id="user-form-title">{user ? "Editar usuario" : "Registrar usuario"}</h2></div>
           <button type="button" aria-label="Cerrar formulario" onClick={onClose}>Cerrar</button>
@@ -104,6 +142,11 @@ export function UserFormModal({
           )}
           {!user && (
             <FormField id="temporaryPassword" label="Contraseña temporal" type="password" autoComplete="new-password" value={values.temporaryPassword} error={errors.temporaryPassword} hint="Mínimo 8 caracteres. Compártela por un canal institucional seguro." onChange={(event) => updateValue("temporaryPassword", event.target.value)} />
+          )}
+          {errors.form && (
+            <p className={styles.formError} role="alert">
+              {errors.form}
+            </p>
           )}
           <footer className={styles.footer}>
             <Button type="button" variant="secondary" onClick={onClose}>Cancelar</Button>

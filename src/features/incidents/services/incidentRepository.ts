@@ -9,6 +9,18 @@ function readAll(): Incident[] {
   return localStorageService.get<Incident[]>(storageKeys.incidents, []).value;
 }
 
+function readFileAsDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () =>
+      typeof reader.result === "string"
+        ? resolve(reader.result)
+        : reject(new Error("No fue posible leer la evidencia."));
+    reader.onerror = () => reject(new Error("No fue posible leer la evidencia."));
+    reader.readAsDataURL(file);
+  });
+}
+
 export const incidentRepository = {
   listVisible(user: User): Incident[] {
     return readAll()
@@ -24,8 +36,16 @@ export const incidentRepository = {
     return { name: file.name, mimeType: file.type, size: file.size };
   },
 
+  async prepareEvidence(file: File): Promise<IncidentEvidence> {
+    const metadata = this.validateEvidence(file);
+    return { ...metadata, dataUrl: await readFileAsDataUrl(file) };
+  },
+
   create(user: User, input: Pick<Incident, "type" | "description" | "location" | "occurredAt" | "priority"> & { evidence?: IncidentEvidence }): Incident {
     if (input.description.trim().length < 10 || !input.location.trim()) throw new Error("Completa una descripción detallada y el lugar.");
+    if (!Number.isFinite(Date.parse(input.occurredAt))) {
+      throw new Error("Indica una fecha válida para la incidencia.");
+    }
     const timestamp = new Date().toISOString();
     const incident: Incident = {
       id: createId("incident"),

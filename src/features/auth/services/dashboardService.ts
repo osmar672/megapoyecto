@@ -1,4 +1,15 @@
-import type { Announcement, AttendanceRecord, Course, Enrollment, Grade, Student, User } from "../../../core/types/domain";
+import type {
+  Announcement,
+  AttendanceRecord,
+  Bus,
+  Course,
+  EmergencyNotice,
+  Enrollment,
+  Grade,
+  Incident,
+  Student,
+  User,
+} from "../../../core/types/domain";
 import { localStorageService } from "../../../core/storage/storageService";
 import { storageKeys } from "../../../core/storage/storageKeys";
 
@@ -32,6 +43,40 @@ export function getDashboardMetrics(user: User): DashboardMetric[] {
       { label: "Cursos asignados", value: String(courseIds.size), detail: "Carga académica activa" },
       { label: "Estudiantes", value: String(studentIds.size), detail: "Matrículas en tus cursos" },
       { label: "Registros académicos", value: String(grades.filter((grade) => courseIds.has(grade.courseId)).length + attendance.filter((record) => courseIds.has(record.courseId)).length), detail: "Calificaciones y asistencia registradas" },
+    ];
+  }
+
+  if (user.role === "STAFF") {
+    const incidents = localStorageService.get<Incident[]>(storageKeys.incidents, []).value;
+    const emergencyNotices = localStorageService.get<EmergencyNotice[]>(
+      storageKeys.emergencyNotices,
+      [],
+    ).value;
+    const buses = localStorageService.get<Bus[]>(storageKeys.buses, []).value;
+    return [
+      {
+        label: "Mis incidencias abiertas",
+        value: String(
+          incidents.filter(
+            (incident) =>
+              incident.reporterUserId === user.id &&
+              !["RESOLVED", "CLOSED"].includes(incident.status),
+          ).length,
+        ),
+        detail: "Tus reportes pendientes de resolución",
+      },
+      {
+        label: "Avisos de emergencia",
+        value: String(emergencyNotices.filter((notice) => notice.status === "ACTIVE").length),
+        detail: "Alertas activas para la comunidad",
+      },
+      {
+        label: "Buses operativos",
+        value: String(
+          buses.filter((bus) => !["OUT_OF_SERVICE", "FINISHED"].includes(bus.status)).length,
+        ),
+        detail: `${buses.length} unidades registradas`,
+      },
     ];
   }
 

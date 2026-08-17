@@ -3,15 +3,12 @@ import type { SearchResult, UserRole } from "../types/domain";
 export interface SearchContext {
   userId: string;
   role: UserRole;
+  relatedStudentId?: string;
 }
 
 export interface SearchProvider {
   id: string;
   search: (query: string, context: SearchContext) => SearchResult[];
-}
-
-interface SearchProviderModule {
-  default: SearchProvider;
 }
 
 export class SearchProviderRegistry {
@@ -42,11 +39,11 @@ export class SearchProviderRegistry {
   }
 }
 
-const modules = import.meta.glob<SearchProviderModule>(
+const modules = import.meta.glob(
   "../../features/**/searchProvider.ts",
-  { eager: true },
-);
+  { eager: true, import: "default" },
+) as Record<string, SearchProvider>;
 
 export const searchProviderRegistry = new SearchProviderRegistry(
-  Object.values(modules).map((module) => module.default),
+  Object.values(modules),
 );

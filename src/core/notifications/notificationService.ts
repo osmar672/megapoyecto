@@ -55,7 +55,10 @@ export const notificationService = {
       updatedNotification = { ...notification, isRead };
       return updatedNotification;
     });
-    if (updatedNotification) writeNotifications(notifications);
+    if (updatedNotification) {
+      writeNotifications(notifications);
+      appEventBus.emit("notification:changed", { userId });
+    }
     return updatedNotification;
   },
 
@@ -66,7 +69,10 @@ export const notificationService = {
       updatedCount += 1;
       return { ...notification, isRead: true };
     });
-    if (updatedCount > 0) writeNotifications(notifications);
+    if (updatedCount > 0) {
+      writeNotifications(notifications);
+      appEventBus.emit("notification:changed", { userId });
+    }
     return updatedCount;
   },
 };
