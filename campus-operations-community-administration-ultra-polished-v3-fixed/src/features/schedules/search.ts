@@ -1,3 +1,0 @@
-import type { SearchProvider,User } from "../../core/types"; import { ALL_ROLES } from "../../core/types"; import { scheduleRepository } from "./service";
-const searchUser:User={id:"usr_admin_001",firstName:"Elena",lastName:"Mora",role:"ADMIN",email:"admin@campus.local",isActive:true};
-export const schedulesSearch:SearchProvider={id:"schedules-search",search:(q)=>scheduleRepository.list(searchUser,{searchQuery:q}).map(e=>({id:e.id,category:"SCHEDULES",title:e.subject,description:`${e.teacherName} · ${e.location}`,path:"/schedules",keywords:[e.teacherName,e.location],allowedRoles:[...ALL_ROLES],source:"schedules"}))};

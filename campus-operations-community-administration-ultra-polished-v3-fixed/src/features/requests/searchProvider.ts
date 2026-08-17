@@ -1,1 +1,0 @@
-import { makeSearch } from "../shared"; import { list } from "./service"; export const searchProvider=makeSearch("requests-search","SOLICITUDES ADMINISTRATIVAS",()=>list().map((x:any)=>({id:x[0],title:x[1],description:x.slice(2).join(" · "),path:"/requests",keywords:x.slice(1)})));

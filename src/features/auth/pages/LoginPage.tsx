@@ -93,6 +93,7 @@ export function LoginPage() {
               <div><dt>Administración</dt><dd><code>admin@colegiohorizonte.edu.cr</code><span>Contraseña: <code>Admin2026!</code></span></dd></div>
               <div><dt>Docente</dt><dd><code>docente@colegiohorizonte.edu.cr</code><span>Contraseña: <code>Docente2026!</code></span></dd></div>
               <div><dt>Familia</dt><dd><code>familia@colegiohorizonte.edu.cr</code><span>Contraseña: <code>Familia2026!</code></span></dd></div>
+              <div><dt>Personal</dt><dd><code>personal@colegiohorizonte.edu.cr</code><span>Contraseña: <code>Personal2026!</code></span></dd></div>
             </dl>
           </details>
           <div className={styles.support}>

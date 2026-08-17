@@ -1,3 +1,0 @@
-import {useEffect,useState} from 'react';import type {WidgetDefinition} from '../../core/types';import {allRoles} from '../shared';import {list,seed} from './service';
-function ForumWidget(){const[posts,setPosts]=useState(()=>{seed();return list()});useEffect(()=>{const fn=()=>setPosts(list());window.addEventListener('forum:changed',fn);return()=>window.removeEventListener('forum:changed',fn)},[]);return <div className="widget"><strong>{posts.filter(p=>!p.hidden).length}</strong><span>Publicaciones activas</span><small>{posts[0]?.title??'Sin actividad'}</small></div>}
-export const dashboardWidget:WidgetDefinition={id:'forum-widget',title:'Actividad del foro',order:15,allowedRoles:allRoles,render:()=> <ForumWidget/>};

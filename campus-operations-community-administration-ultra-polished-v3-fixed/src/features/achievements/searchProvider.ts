@@ -1,1 +1,0 @@
-import {makeSearch} from '../shared';import {list} from './service';export const searchProvider=makeSearch('achievements-search','LOGRO',()=>list().map(a=>({id:a.id,title:a.name,description:a.description,path:'/achievements',keywords:[a.category,String(a.progress)]})));

@@ -2,6 +2,8 @@
 
 import { Link } from "react-router-dom";
 import { roleLabels } from "../../../core/utils/roleLabels";
+import { dashboardWidgetRegistry } from "../../../core/dashboard/dashboardWidgetRegistry";
+import { registeredNavigation } from "../../../core/featureRegistry";
 import { useAuth } from "../context/AuthContext";
 import { getDashboardMetrics } from "../services/dashboardService";
 import styles from "./DashboardPage.module.css";
@@ -10,6 +12,9 @@ export function DashboardPage() {
   const { user } = useAuth();
   if (!user) return null;
   const metrics = getDashboardMetrics(user);
+  const widgets = dashboardWidgetRegistry.listForRole(user.role);
+  const today = new Date();
+  const quickLinks = registeredNavigation.filter((item) => item.allowedRoles.includes(user.role) && !["/login", "/dashboard"].includes(item.path)).slice(0, 6);
 
   return (
     <div className={styles.page}>
@@ -19,8 +24,10 @@ export function DashboardPage() {
           <h1>Buenos días, {user.firstName}</h1>
           <p>Esta es la información disponible para tu perfil de {roleLabels[user.role].toLowerCase()}.</p>
         </div>
-        <div className={styles.date}><span>Jueves</span><strong>13 de agosto</strong><small>Curso lectivo 2026</small></div>
+        <div className={styles.date}><span>{new Intl.DateTimeFormat("es-CR", { weekday: "long" }).format(today)}</span><strong>{new Intl.DateTimeFormat("es-CR", { day: "numeric", month: "long" }).format(today)}</strong><small>Curso lectivo {today.getFullYear()}</small></div>
       </section>
+
+      {widgets.length > 0 && <section className={styles.widgetSection} aria-label="Información actual de servicios"><div className={styles.panelHeader}><div><p className={styles.eyebrow}>Servicios conectados</p><h2>Información para tu jornada</h2></div></div><div className={styles.widgetGrid}>{widgets.map((widget) => { const Widget = widget.component; return <article className={styles.widgetCard} key={widget.id}><span>{widget.title}</span><Widget user={user} /></article>; })}</div></section>}
 
       <section className={styles.metrics} aria-label="Indicadores principales">
         {metrics.map((metric, index) => (
@@ -37,9 +44,7 @@ export function DashboardPage() {
         <section className={styles.panel}>
           <div className={styles.panelHeader}><div><p className={styles.eyebrow}>Accesos frecuentes</p><h2>Continúa tu jornada</h2></div></div>
           <div className={styles.actions}>
-            <Link to="/academics"><span>Seguimiento</span><strong>{user.role === "STUDENT_FAMILY" ? "Consultar información académica" : "Gestionar área académica"}</strong><small>Calificaciones, cursos y asistencia autorizada</small></Link>
-            <Link to="/announcements"><span>Comunidad</span><strong>Revisar comunicados</strong><small>Información publicada para tu perfil</small></Link>
-            {user.role === "ADMIN" && <Link to="/users"><span>Administración</span><strong>Gestionar usuarios</strong><small>Altas, edición y control de acceso</small></Link>}
+            {quickLinks.map((item) => <Link key={item.path} to={item.path}><span>Acceso</span><strong>{item.label}</strong><small>Abrir módulo autorizado para tu perfil</small></Link>)}
           </div>
         </section>
         <aside className={styles.sidePanel}>

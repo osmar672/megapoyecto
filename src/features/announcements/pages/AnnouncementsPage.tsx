@@ -14,6 +14,7 @@ const audienceLabels: Record<AnnouncementAudience, string> = {
   ADMIN: "Administración",
   TEACHER: "Docentes",
   STUDENT_FAMILY: "Estudiantes y familias",
+  STAFF: "Personal administrativo",
 };
 
 const emptyInput: AnnouncementInput = { title: "", body: "", audience: "ALL" };

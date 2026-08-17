@@ -1,16 +1,40 @@
 import type {
+  Achievement,
   Announcement,
   AttendanceRecord,
+  Bus,
+  BusRoute,
+  CafeteriaProduct,
+  CampusLocation,
   Course,
   Credential,
+  EmergencyNotice,
   Enrollment,
+  ForumComment,
+  ForumPost,
   Grade,
+  Incident,
+  ScheduleEntry,
   Student,
+  TimelineEvent,
   User,
 } from "../types/domain";
 import { createSalt, hashPassword } from "../security/password";
 import { localStorageService } from "../storage/storageService";
 import { storageKeys } from "../storage/storageKeys";
+import {
+  seedAchievements,
+  seedBuses,
+  seedBusRoutes,
+  seedCafeteriaProducts,
+  seedCampusLocations,
+  seedEmergencyNotices,
+  seedForumComments,
+  seedForumPosts,
+  seedIncidents,
+  seedScheduleEntries,
+  seedTimelineEvents,
+} from "./expansionSeedData";
 
 const now = "2026-08-13T14:00:00.000Z";
 
@@ -153,4 +177,15 @@ export async function initializeSeedData(): Promise<void> {
   initializeCollection(storageKeys.grades, seedGrades);
   initializeCollection(storageKeys.attendance, seedAttendance);
   initializeCollection(storageKeys.announcements, seedAnnouncements);
+  initializeCollection<TimelineEvent>(storageKeys.timelineEvents, seedTimelineEvents);
+  initializeCollection<Achievement>(storageKeys.achievements, seedAchievements);
+  initializeCollection<ForumPost>(storageKeys.forumPosts, seedForumPosts);
+  initializeCollection<ForumComment>(storageKeys.forumComments, seedForumComments);
+  initializeCollection<Incident>(storageKeys.incidents, seedIncidents);
+  initializeCollection<CampusLocation>(storageKeys.campusLocations, seedCampusLocations);
+  initializeCollection<EmergencyNotice>(storageKeys.emergencyNotices, seedEmergencyNotices);
+  initializeCollection<Bus>(storageKeys.buses, seedBuses);
+  initializeCollection<BusRoute>(storageKeys.busRoutes, seedBusRoutes);
+  initializeCollection<CafeteriaProduct>(storageKeys.cafeteriaProducts, seedCafeteriaProducts);
+  initializeCollection<ScheduleEntry>(storageKeys.scheduleEntries, seedScheduleEntries);
 }

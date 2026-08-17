@@ -1,1 +1,0 @@
-export { documentsFeature } from "./feature";

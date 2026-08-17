@@ -1,1 +1,0 @@
-import type {NavigationItem} from '../../core/types';import {AnalyticsPage} from './page';export const navigation:NavigationItem={label:'Estadísticas',path:'/statistics',allowedRoles:['ADMIN'],order:90};export const analyticsFeature={id:'analytics',navigation,routes:[{path:'/statistics',element:<AnalyticsPage/>,allowedRoles:['ADMIN']}],search:undefined,widget:undefined};

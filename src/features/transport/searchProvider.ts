@@ -1,0 +1,3 @@
+import type { SearchProvider } from "../../core/search/searchProviderRegistry"; import { transportRepository } from "./services/transportRepository";
+const provider: SearchProvider = { id: "transport", search(query, context) { const normalized = query.toLocaleLowerCase("es"); return transportRepository.listRoutes().filter((route) => `${route.name} ${route.stops.map((stop) => stop.name).join(" ")}`.toLocaleLowerCase("es").includes(normalized)).map((route) => ({ id: route.id, category: "ROUTES", title: route.name, description: `${route.departureTime}–${route.arrivalTime}`, path: "/transport/schedules", keywords: route.stops.map((stop) => stop.name), allowedRoles: [context.role], source: "transport" })); } };
+export default provider;

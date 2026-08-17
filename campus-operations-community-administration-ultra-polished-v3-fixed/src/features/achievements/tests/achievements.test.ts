@@ -1,2 +1,0 @@
-import {beforeEach,describe,expect,it} from 'vitest';import {list,seed,unlock} from '../service';
-beforeEach(()=>localStorage.clear());describe('achievements',()=>{it('seeds idempotently',()=>{seed();const first=list();seed();expect(list()).toEqual(first);expect(first).toHaveLength(8)});it('unlocks and persists',()=>{seed();expect(unlock('ach-2','usr_admin_001')).toBe(true);expect(list().find(a=>a.id==='ach-2')?.unlocked).toBe(true)})});

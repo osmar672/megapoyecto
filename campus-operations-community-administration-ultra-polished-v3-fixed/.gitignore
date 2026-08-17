@@ -1,9 +1,0 @@
-node_modules/
-dist/
-coverage/
-.env
-.env.*
-!.env.example
-.vscode/*.local
-.DS_Store
-*.log

@@ -1,8 +1,11 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { appEventBus } from "../../core/events/appEventBus";
 import { registeredNavigation } from "../../core/featureRegistry";
+import { notificationService } from "../../core/notifications/notificationService";
+import { searchProviderRegistry } from "../../core/search/searchProviderRegistry";
 import { roleLabels } from "../../core/utils/roleLabels";
 import { useAuth } from "../../features/auth/context/AuthContext";
 import { Button } from "../ui/Button";
@@ -12,9 +15,22 @@ export function AppShell({ children }: { children: ReactNode }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [notificationVersion, setNotificationVersion] = useState(0);
   const navigation = registeredNavigation.filter((item) =>
     user ? item.allowedRoles.includes(user.role) : false,
   );
+  const searchResults = useMemo(
+    () => user ? searchProviderRegistry.search(query, { userId: user.id, role: user.role }).slice(0, 8) : [],
+    [query, user],
+  );
+  const unreadCount = user ? notificationService.getUnreadCount(user.id) : 0;
+
+  useEffect(() => appEventBus.on("notification:created", () => {
+    setNotificationVersion((current) => current + 1);
+  }), []);
+
+  void notificationVersion;
 
   const handleLogout = () => {
     logout();
@@ -64,8 +80,16 @@ export function AppShell({ children }: { children: ReactNode }) {
           <span>Portal institucional</span>
           <strong>Intranet Escolar</strong>
         </div>
+        {user && <div className={styles.search}>
+          <label htmlFor="global-search">Búsqueda global</label>
+          <input id="global-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Personas, lugares, eventos..." autoComplete="off" />
+          {query.trim() && <div className={styles.searchResults} role="listbox" aria-label="Resultados de búsqueda">
+            {searchResults.length === 0 ? <p role="status">No hay resultados.</p> : searchResults.map((result) => <button key={`${result.source}-${result.id}`} type="button" role="option" aria-selected="false" onClick={() => { setQuery(""); navigate(result.path); }}><span>{result.category}</span><strong>{result.title}</strong><small>{result.description}</small></button>)}
+          </div>}
+        </div>}
         {user && (
           <div className={styles.account}>
+            <Link className={styles.notificationLink} to="/notifications" aria-label={`${unreadCount} notificaciones sin leer`}>Avisos{unreadCount > 0 && <span>{unreadCount}</span>}</Link>
             <div className={styles.avatar} aria-hidden="true">
               {user.firstName.charAt(0)}{user.lastName.charAt(0)}
             </div>

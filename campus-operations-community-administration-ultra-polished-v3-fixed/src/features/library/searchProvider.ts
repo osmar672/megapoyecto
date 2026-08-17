@@ -1,1 +1,0 @@
-import { makeSearch } from "../shared"; import { list } from "./service"; export const searchProvider=makeSearch("library-search","BIBLIOTECA ESCOLAR",()=>list().map((x:any)=>({id:x[0],title:x[1],description:x.slice(2).join(" · "),path:"/library",keywords:x.slice(1)})));

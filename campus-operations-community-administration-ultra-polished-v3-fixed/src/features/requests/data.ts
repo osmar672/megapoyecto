@@ -1,1 +1,0 @@
-export const demoData = [("req-001", "Constancia de participación", "Constancia", "En revisión"), ("req-002", "Cambio de aula", "Cambio de aula", "Aprobada"), ("req-003", "Material para actividad", "Material", "Pendiente"), ("req-004", "Soporte de proyección", "Soporte tecnológico", "Completada"), ("req-005", "Certificación académica", "Certificación", "Pendiente")] as const;

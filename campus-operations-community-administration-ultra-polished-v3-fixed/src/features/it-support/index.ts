@@ -1,1 +1,0 @@
-export { itsupportFeature } from "./feature";

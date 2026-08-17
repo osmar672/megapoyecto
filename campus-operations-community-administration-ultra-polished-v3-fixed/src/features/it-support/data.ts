@@ -1,1 +1,0 @@
-export const demoData = [("tic-001", "Acceso a red institucional", "Internet", "Abierto"), ("tic-002", "Configuración de proyector", "Proyección", "En diagnóstico"), ("tic-003", "Impresora del laboratorio", "Impresoras", "Resuelto"), ("tic-004", "Cuenta institucional", "Cuenta", "Cerrado"), ("tic-005", "Equipo sin audio", "Computadora", "Asignado")] as const;

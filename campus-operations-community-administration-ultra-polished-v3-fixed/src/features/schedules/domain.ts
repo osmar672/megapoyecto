@@ -1,1 +1,0 @@
-import type { ScheduleEntry } from "../../core/types"; export const sortByStart=(items:ScheduleEntry[])=>[...items].sort((a,b)=>a.startTime.localeCompare(b.startTime)); export const dayLabel=(day:number)=>["","Lunes","Martes","Miércoles","Jueves","Viernes"][day] ?? "";

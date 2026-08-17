@@ -1,4 +1,7 @@
 import type { Announcement, AnnouncementAudience, AuthSession } from "../../../core/types/domain";
+import type { User } from "../../../core/types/domain";
+import { appEventBus } from "../../../core/events/appEventBus";
+import { notificationService } from "../../../core/notifications/notificationService";
 import { localStorageService } from "../../../core/storage/storageService";
 import { storageKeys } from "../../../core/storage/storageKeys";
 import { createId } from "../../../core/utils/createId";
@@ -79,6 +82,17 @@ export const announcementRepository = {
     const published: Announcement = { ...current, status: "PUBLISHED", publishedAt: timestamp, updatedAt: timestamp };
     announcements[index] = published;
     writeAll(announcements);
+    appEventBus.emit("announcement:published", { announcement: published });
+    const recipients = localStorageService.get<User[]>(storageKeys.users, []).value.filter(
+      (user) => published.audience === "ALL" || published.audience === user.role,
+    );
+    recipients.forEach((user) => notificationService.create({
+      userId: user.id,
+      type: "ANNOUNCEMENT",
+      title: published.title,
+      message: published.body,
+      link: "/announcements",
+    }));
     return published;
   },
 

@@ -1,1 +1,0 @@
-export { transportpassFeature } from "./feature";

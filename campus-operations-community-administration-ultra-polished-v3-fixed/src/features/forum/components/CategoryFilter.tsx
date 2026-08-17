@@ -1,1 +1,0 @@
-import type {Category} from '../service';export function CategoryFilter({value,onChange,categories}:{value:string;onChange:(v:string)=>void;categories:Category[]}){return <select className="input" value={value} onChange={e=>onChange(e.target.value)} aria-label="Categoría"><option value="ALL">Todas</option>{categories.map(c=><option key={c}>{c}</option>)}</select>}

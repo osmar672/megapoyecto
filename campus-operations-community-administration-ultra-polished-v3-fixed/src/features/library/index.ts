@@ -1,1 +1,0 @@
-export { libraryFeature } from "./feature";
