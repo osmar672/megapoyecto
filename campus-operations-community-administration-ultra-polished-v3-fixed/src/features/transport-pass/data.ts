@@ -1,0 +1,1 @@
+export const demoData = [("pass-001", "Pase ruta norte", "Ruta Norte", "Aprobado"), ("pass-002", "Pase ruta centro", "Ruta Centro", "Pendiente"), ("pass-003", "Pase ruta sur", "Ruta Sur", "Renovación requerida"), ("pass-004", "Pase temporal", "Ruta Especial", "Aprobado")] as const;

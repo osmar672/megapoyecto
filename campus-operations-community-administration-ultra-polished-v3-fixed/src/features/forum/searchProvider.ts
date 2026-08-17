@@ -1,0 +1,1 @@
+import {makeSearch} from '../shared';import {list} from './service';export const searchProvider=makeSearch('forum-search','FORO',()=>list().filter(p=>!p.hidden).map(p=>({id:p.id,title:p.title,description:p.body,path:'/forum',keywords:[p.category,p.authorName]})));

@@ -1,0 +1,1 @@
+export { documentsFeature } from "./feature";

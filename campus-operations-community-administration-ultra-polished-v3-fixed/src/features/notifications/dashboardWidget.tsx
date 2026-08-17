@@ -1,0 +1,3 @@
+import {useEffect,useState} from 'react';import type {User,WidgetDefinition} from '../../core/types';import {allRoles} from '../shared';import {countUnread,seed,subscribe} from './service';
+function NotificationsWidget({user}:{user:User}){const[unread,setUnread]=useState(0);useEffect(()=>{seed();const refresh=()=>setUnread(countUnread(user.id,user.role));refresh();return subscribe(refresh)},[user.id,user.role]);return <div className="widget"><strong>{unread}</strong><span>No leídas</span><small>Centro personal</small></div>}
+export const dashboardWidget:WidgetDefinition={id:'notifications-widget',title:'Notificaciones',order:5,allowedRoles:allRoles,render:user=><NotificationsWidget user={user}/>};

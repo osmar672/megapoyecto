@@ -1,0 +1,1 @@
+import { describe,it,expect } from "vitest"; import { demoData } from "../data"; import { validateRequired } from "../validators"; describe("Directorio institucional",()=>{it("incluye datos demostrativos",()=>expect(demoData.length).toBeGreaterThanOrEqual(4));it("valida campos requeridos",()=>expect(validateRequired("dato válido")).toBe(true));});

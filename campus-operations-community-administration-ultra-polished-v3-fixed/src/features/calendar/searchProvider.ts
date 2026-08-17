@@ -1,0 +1,1 @@
+import { makeSearch } from "../shared"; import { list } from "./service"; export const searchProvider=makeSearch("calendar-search","CALENDARIO INSTITUCIONAL",()=>list().map((x:any)=>({id:x[0],title:x[1],description:x.slice(2).join(" · "),path:"/calendar",keywords:x.slice(1)})));

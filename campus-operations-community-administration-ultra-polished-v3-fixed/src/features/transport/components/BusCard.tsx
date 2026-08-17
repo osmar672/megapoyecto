@@ -1,0 +1,2 @@
+import type { Bus } from "../../../core/types"; import { Badge } from "../../../components/ui";
+export function BusCard({bus}:{bus:Bus}){return <article className="card transport-card"><div className="split"><div><span className="eyebrow">{bus.number}</span><h3>{bus.driverName}</h3><p>Siguiente parada: {bus.nextStop}</p></div><Badge tone={bus.status==="DELAYED"?"warning":bus.status==="ON_TIME"?"success":"danger"}>{bus.status}</Badge></div></article>}

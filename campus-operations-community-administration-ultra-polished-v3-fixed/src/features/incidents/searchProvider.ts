@@ -1,0 +1,1 @@
+import {makeSearch} from '../shared';import {list} from './service';export const searchProvider=makeSearch('incidents-search','INCIDENCIA',()=>list().filter(i=>!['Bullying','Seguridad'].includes(i.type)).map(i=>({id:i.id,title:i.description,description:`${i.type} · ${i.place} · ${i.status}`,path:'/incidents',keywords:[i.type,i.place,i.priority,i.status]})),['ADMIN']);

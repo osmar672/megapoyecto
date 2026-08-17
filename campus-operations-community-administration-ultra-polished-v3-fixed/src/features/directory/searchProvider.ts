@@ -1,0 +1,1 @@
+import { makeSearch } from "../shared"; import { list } from "./service"; export const searchProvider=makeSearch("directory-search","DIRECTORIO INSTITUCIONAL",()=>list().map((x:any)=>({id:x[0],title:x[1],description:x.slice(2).join(" · "),path:"/directory",keywords:x.slice(1)})));

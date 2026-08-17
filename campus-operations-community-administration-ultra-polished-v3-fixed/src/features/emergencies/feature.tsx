@@ -1,0 +1,4 @@
+import type { NavigationItem } from "../../core/types"; import { ALL_ROLES } from "../../core/types"; import { EmergenciesPage } from "./page"; import { emergencyRepository } from "./service";
+export const emergenciesNavigation:NavigationItem={label:"Emergencies",path:"/emergencies",allowedRoles:[...ALL_ROLES],order:80};
+export const emergenciesWidget:WidgetDefinition={id:"emergencies-status-widget",title:"Estado de emergencia",order:40,allowedRoles:[...ALL_ROLES],render:()=>{const active=emergencyRepository.list().filter((item)=>item.status==="ACTIVE").length; return <div className="widget"><strong>{active?`${active} alerta(s) activa(s)`:"Sistema estable"}</strong><span>{active?"Requiere atención inmediata":"Sin incidencias registradas"}</span></div>;}};
+export const emergenciesFeature={id:"emergencies",navigation:emergenciesNavigation,routes:[{path:"/emergencies",element:<EmergenciesPage/>,allowedRoles:[...ALL_ROLES]}],widget:emergenciesWidget} as const;
