@@ -1,0 +1,1 @@
+import type { CafeteriaProduct } from "../../core/types"; export const availableProducts=(items:CafeteriaProduct[])=>items.filter(p=>p.availability!=="UNAVAILABLE"); export const categories=["COMIDAS","BEBIDAS","SNACKS","POSTRES","SALUDABLE"] as const;

@@ -1,0 +1,1 @@
+import type { Bus,BusRoute } from "../../core/types"; export const selectDelayed=(buses:Bus[])=>buses.filter(b=>b.status==="DELAYED"); export const selectRoute=(routes:BusRoute[],id:string)=>routes.find(r=>r.id===id);

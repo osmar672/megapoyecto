@@ -1,0 +1,1 @@
+import type {Notification} from '../service';export function NotificationItem({item}:{item:Notification}){return <article className="card"><span className="badge badge-info">{item.type}</span><h3>{item.title}</h3><p>{item.message}</p></article>}

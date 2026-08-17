@@ -1,0 +1,11 @@
+import { beforeEach,describe,expect,it } from "vitest"; import { scheduleRepository } from "../service"; import { schedulesNavigation,schedulesWidget } from "../feature"; import { schedulesSearch } from "../search"; import { sortByStart,dayLabel } from "../domain";
+const admin={id:"a",firstName:"A",lastName:"A",role:"ADMIN" as const,email:"a@x",isActive:true}; const teacher={id:"teacher_1",firstName:"T",lastName:"T",role:"TEACHER" as const,email:"t@x",isActive:true}; const family={id:"student_1",firstName:"S",lastName:"S",role:"STUDENT_FAMILY" as const,email:"s@x",isActive:true};
+describe("Schedules Module",()=>{beforeEach(()=>scheduleRepository.reset());
+it("loads schedules for ADMIN",()=>expect(scheduleRepository.list(admin)).toHaveLength(20));
+it("filters teacher schedules by ownership",()=>expect(scheduleRepository.list(teacher).every(e=>e.userId===teacher.id)).toBe(true));
+it("filters family schedules by student",()=>expect(scheduleRepository.list(family).every(e=>e.studentId===family.id)).toBe(true));
+it("filters by day",()=>expect(scheduleRepository.list(admin,{day:1}).every(e=>e.dayOfWeek===1)).toBe(true));
+it("filters by type",()=>expect(scheduleRepository.list(admin,{type:"CLASS"}).every(e=>e.type==="CLASS")).toBe(true));
+it("searches subject teacher and location",()=>expect(scheduleRepository.list(admin,{searchQuery:"matemática"}).length).toBeGreaterThan(0));
+it("sorts and labels schedule days",()=>{const list=scheduleRepository.list(admin);expect(sortByStart(list).length).toBe(list.length);expect(dayLabel(3)).toBe("Miércoles")});
+it("uses required navigation widget and search contracts",()=>{expect(schedulesNavigation.path).toBe("/schedules");expect(schedulesNavigation.order).toBe(15);expect(schedulesWidget.order).toBe(20);expect(schedulesSearch.search("matemática")[0]?.category).toBe("SCHEDULES")});});

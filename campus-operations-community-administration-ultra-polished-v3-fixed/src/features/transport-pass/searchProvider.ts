@@ -1,0 +1,1 @@
+import { makeSearch } from "../shared"; import { list } from "./service"; export const searchProvider=makeSearch("transport-pass-search","PASES DE TRANSPORTE",()=>list().map((x:any)=>({id:x[0],title:x[1],description:x.slice(2).join(" · "),path:"/transport-pass",keywords:x.slice(1)})));

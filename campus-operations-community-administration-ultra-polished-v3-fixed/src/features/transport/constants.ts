@@ -1,0 +1,1 @@
+export const TRANSPORT_PATHS={root:"/transport",schedules:"/transport/schedules"} as const; export const TRANSPORT_SEARCH_CATEGORY="ROUTES" as const; export const TRANSPORT_NAV_ORDER=50; export const TRANSPORT_WIDGET_ORDER=30;

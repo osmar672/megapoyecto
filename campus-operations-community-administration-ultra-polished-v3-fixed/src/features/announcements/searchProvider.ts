@@ -1,0 +1,1 @@
+import {makeSearch} from '../shared';import {list} from './service';export const searchProvider=makeSearch('announcements-search','AVISO',()=>list().filter(a=>a.status==='Publicado').map(a=>({id:a.id,title:a.title,description:a.body,path:'/announcements',keywords:[a.type,a.priority]})));

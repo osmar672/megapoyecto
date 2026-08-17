@@ -1,0 +1,1 @@
+export function PriorityBadge({priority}:{priority:string}){return <span className={priority==='Urgente'?'badge badge-danger':priority==='Importante'?'badge badge-warning':'badge badge-neutral'}>{priority}</span>}

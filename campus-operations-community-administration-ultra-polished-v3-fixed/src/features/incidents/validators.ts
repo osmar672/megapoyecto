@@ -1,0 +1,1 @@
+import {evidencePolicy} from './data';export function validIncident(description:string,place:string){return description.trim().length>=5&&place.trim().length>=2;}export function validEvidenceMeta(type:string,size:number){return evidencePolicy.types.includes(type)&&size<=evidencePolicy.maxBytes;}

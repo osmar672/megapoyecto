@@ -1,0 +1,1 @@
+export const demoData = [("room-001", "Aula 101", "Aula", "30", "Edificio A"), ("room-002", "Laboratorio 2", "Laboratorio", "24", "Edificio B"), ("room-003", "Auditorio", "Auditorio", "180", "Edificio central"), ("room-004", "Cancha central", "Deportivo", "80", "Zona deportiva"), ("room-005", "Sala de reuniones", "Administrativo", "14", "Edificio administrativo")] as const;
